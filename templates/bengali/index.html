@@ -1,9 +1,12 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Contact Information Table</title>
+    <link rel="stylesheet" href={% static "css/style.css" %}>
     <style>
         table {
             width: 80%;
@@ -31,23 +34,28 @@
 <body>
     <table>
         <thead>
+            {% for i in data %}
             <tr>
-                <th>Phone Number</th>
+                <th class="color">Phone Number</th>
                 <th>Address</th>
                 <th>Gender</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>+1 123-456-7890</td>
-                <td>123 Main Street, Springfield</td>
-                <td>Male</td>
+                <td>
+                    {{ i.phone }}
+                </td>
+                <td>
+                    {{ i.address }}
+                </td>
+                <td>
+                    {{ i.gender }}
+                </td>
             </tr>
-            <tr>
-                <td>+1 3674827382</td>
-                <td>123 Main Street, Springfield</td>
-                <td>Male</td>
-            </tr>
+            {% endfor %}
+            
+            
             
         </tbody>
     </table>

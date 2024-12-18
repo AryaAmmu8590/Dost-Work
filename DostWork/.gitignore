@@ -1,0 +1,54 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+
+# Django
+*.log
+*.pot
+*.py[cod]
+__pycache__/
+db.sqlite3
+media/
+staticfiles/
+
+# Environment-specific files
+.env
+.venv/
+env/
+venv/
+*.env
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+**/migrations
+# Distribution/Packaging
+*.egg-info/
+dist/
+build/
+*.tar.gz
+
+# Sphinx documentation
+docs/_build/
+
+# PyCharm
+.idea/
+
+# mypy
+.mypy_cache/
+
+# Coverage reports
+.coverage
+.coverage.*
+*.hypothesis/
+
+# Virtual Environment
+venv/
+.env/

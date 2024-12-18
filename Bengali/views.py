@@ -8,5 +8,4 @@ from.models import*
 
 def home(request):
     data=User_reg.objects.all()
-
     return render(request,"bengali/index.html",context={"data":data})
