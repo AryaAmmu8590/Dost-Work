@@ -3,5 +3,9 @@ from.models import*
 
 # Register your models here.
 
-admin.site.register(User_reg)
+admin.site.register(Profile)
+admin.site.register(UserDetails)
+admin.site.register(WorkersDetails)
+admin.site.register(AgencyDetails)
+
 

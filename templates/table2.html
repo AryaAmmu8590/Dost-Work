@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filterable Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        select {
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Filterable User Table</h1>
+    <label for="userTypeFilter">Filter by User Type:</label>
+    <select id="userTypeFilter">
+        <option value="all">All</option>
+        <option value="admin">Admin</option>
+        <option value="editor">Editor</option>
+        <option value="viewer">Viewer</option>
+    </select>
+
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>User Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-type="admin">
+                <td>Alice</td>
+                <td>alice@example.com</td>
+                <td>Admin</td>
+            </tr>
+            <tr data-type="editor">
+                <td>Bob</td>
+                <td>bob@example.com</td>
+                <td>Editor</td>
+            </tr>
+            <tr data-type="viewer">
+                <td>Charlie</td>
+                <td>charlie@example.com</td>
+                <td>Viewer</td>
+            </tr>
+            <tr data-type="admin">
+                <td>Diana</td>
+                <td>diana@example.com</td>
+                <td>Admin</td>
+            </tr>
+            <tr data-type="viewer">
+                <td>Eva</td>
+                <td>eva@example.com</td>
+                <td>Viewer</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

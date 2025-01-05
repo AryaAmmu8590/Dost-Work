@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Example</title>
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Personal Information Form</h2>
+        <form action="#" method="POST">
+            {% csrf_token %}
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="id_type">Select ID Type:</label>
+            <select id="id_type" name="id_type" required>
+                <option value="">--Select ID Type--</option>
+                <option value="aadhar">Aadhar Number</option>
+                <option value="passport">Passport Number</option>
+                <option value="license">License Number</option>
+            </select>
+
+            <label for="id_value">Enter ID Value:</label>
+            <input type="text" id="id_value" name="id_value" required placeholder="Enter the selected ID value">
+
+            <button type="submit">Submit</a></button>
+        </form>
+    </div>
+    <script>
+        const idType = document.getElementById('id_type');
+        const idValue = document.getElementById('id_value');
+
+        idType.addEventListener('change', () => {
+            const type = idType.value;
+
+            if (type === 'aadhar') {
+                idValue.setAttribute('pattern', '\\d{12}');
+                idValue.setAttribute('placeholder', 'Enter 12-digit Aadhar number');
+            } else if (type === 'passport') {
+                idValue.setAttribute('pattern', '[A-Z0-9]{6,9}');
+                idValue.setAttribute('placeholder', 'Enter Passport number');
+            } else if (type === 'license') {
+                idValue.setAttribute('pattern', '[A-Z0-9]{10}');
+                idValue.setAttribute('placeholder', 'Enter License number');
+            } else {
+                idValue.removeAttribute('pattern');
+                idValue.setAttribute('placeholder', 'Enter the selected ID value');
+            }
+        });
+    </script>
+</body>
+</html>

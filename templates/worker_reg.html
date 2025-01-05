@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Registration</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/worker-reg.css' %}">
+    
+</head>
+<body>
+    <div class="container-main">
+        <div class="container">
+            <form class="form" method="POST" enctype="multipart/form-data" action="" >
+                {% csrf_token %}
+                <h1 class="title">Worker Registration</h1>
+                <p class="sub mb">Please provide your details to register</p>
+    
+                <!-- Profile Picture Field -->
+                <div class="form-field">
+                    <label class="avatar" for="file">
+                        <!-- SVG Icon for profile -->
+                    </label>
+                    {{ form.profile }} <!-- Profile picture field -->
+                </div>
+    
+                <!-- First Name -->
+                <div class="form-field">
+                    <label for="id_first_name">First Name</label>
+                    <input type="text" id="id_first_name" name="first_name" value="{{ form.first_name.value|default:'' }}" placeholder="Enter First Name" required>
+                </div>
+    
+                <!-- Last Name -->
+                <div class="form-field">
+                    <label for="id_last_name">Last Name</label>
+                    <input type="text" id="id_last_name" name="last_name" value="{{ form.last_name.value|default:'' }}" placeholder="Enter Last Name" required>
+                </div>
+    
+                <!-- ID Number -->
+                <div class="form-field">
+                    <label for="id_id_no">ID Number</label>
+                    <input type="text" id="id_id_no" name="id_no" value="{{ form.id_no.value|default:'' }}" placeholder="Enter ID Number" required>
+                </div>
+    
+                <!-- Available Time -->
+                <div class="form-field">
+                    <label for="id_time">Available Time</label>
+                    <input type="text" id="id_time" name="time" value="{{ form.time.value|default:'' }}" placeholder="Enter Available Time" required>
+                </div>
+    
+                <!-- Image -->
+                <div class="form-field">
+                    <label for="id_image">Image</label>
+                    <input type="file" id="id_image" name="image" accept="image/*">
+                </div>
+    
+                <!-- Address -->
+                <div class="form-field">
+                    <label for="id_address">Address</label>
+                    <input type="text" id="id_address" name="address" value="{{ form.address.value|default:'' }}" placeholder="Enter Address" required>
+                </div>
+    
+                <!-- Amount -->
+                <div class="form-field">
+                    <label for="id_amount">Amount</label>
+                    <input type="number" id="id_amount" name="amount" value="{{ form.amount.value|default:'' }}" placeholder="Enter Amount" required>
+                </div>
+    
+                <!-- Email -->
+                <div class="form-field">
+                    <label for="id_email">Email</label>
+                    <input type="email" id="id_email" name="email" value="{{ form.email.value|default:'' }}" placeholder="Enter Email" required>
+                </div>
+    
+                <!-- Phone -->
+                <div class="form-field">
+                    <label for="id_phone">Phone</label>
+                    <input type="tel" id="id_phone" name="phone" value="{{ form.phone.value|default:'' }}" placeholder="Enter Phone Number" required>
+                </div>
+    
+                <p class="sub">Already have an account? <a href="#">Log in</a></p>
+                <button type="submit" class="submit-btn">Register</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

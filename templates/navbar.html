@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar</title>
+    <link rel="stylesheet" href={% static 'css/navbar.css' %}>
+</head>
+<body>
+    <div class="navbar">
+        <a href="{% url 'user_registration' %}" class="active" id="user-link">User</a>
+        <a href="{% url 'worker-registration' %}" id="worker-link">Worker</a>
+        <a href="{% url 'agency-registration' %}" id="agency-link">Agency</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard with Sidebar</title>
+    <link rel="stylesheet" href="{% static "css/user_dashboard.css" %}">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>USER</h2>
+            <ul>
+                <li><a href="#">Profile</a></li>
+                <li><a href="">Workers</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1>Welcome to the Dashboard</h1>
+            <p>This is where your main content will go.</p>
+        </div>
+    </div>
+
+    <script>
+        // Optional: JavaScript to toggle the sidebar (for mobile view, etc.)
+    </script>
+</body>
+</html>
