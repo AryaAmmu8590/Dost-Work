@@ -1,6 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser,Group, Permission
 
+
+
+from django.contrib.auth.models import BaseUserManager
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        return self.create_user(email, password, **extra_fields)
+
+
 # Create your models here.
 class RoleChoices(models.TextChoices):
     ADMIN="admin","admin"
@@ -12,7 +33,7 @@ class RoleChoices(models.TextChoices):
 class Profile(AbstractUser):
     USERNAME_FIELD='email'
     REQUIRED_FIELDS=[]
-
+    objects = CustomUserManager()
     username = models.CharField(max_length=150, blank=True, null=True)
     first_name = models.CharField(max_length=150, blank=True, null=True)
     last_name= models.CharField(max_length=150, blank=True, null=True)
@@ -32,7 +53,7 @@ class Profile(AbstractUser):
         )
 
     def __str__(self):
-        return self.username
+        return self.email
 
 
 class UserDetails(models.Model):
@@ -42,7 +63,7 @@ class UserDetails(models.Model):
     sex=models.CharField(max_length=10 ,blank=True, null=True)
 
     def __str__(self):
-        return self.profile.username
+        return self.address
 
 
 
@@ -52,10 +73,10 @@ class WorkersDetails(models.Model):
     profile=models.OneToOneField('Profile',on_delete=models.CASCADE,related_name="worker_profile",null=True,blank=True)
     id_no=models.CharField(max_length=150,null=True)
     image=models.ImageField(null=True , blank=True)
-    time=models.TimeField()
-    amount=models.IntegerField()
     address=models.TextField()
-    
+    age=models.IntegerField(blank=True,null=True)
+    gender=models.CharField(max_length=10 ,blank=True, null=True)
+
     
 
     def __str__(self):
@@ -67,13 +88,24 @@ class WorkersDetails(models.Model):
 
 class AgencyDetails(models.Model):
      profile=models.OneToOneField('Profile',on_delete=models.CASCADE,related_name="agency_profile",null=True,blank=True)
-     Agency_Name=models.CharField(max_length=150)
-     licence_id=models.IntegerField(null=True)
+     agency_name=models.CharField(max_length=150)
+     licence_id=models.CharField(max_length=255,null=True)
      address=models.CharField(max_length=140,null=True)
      
 
      def __str__(self):
         return self.profile.username
+
+
+class Review(models.Model):
+    worker = models.ForeignKey('WorkersDetails', on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='user_reviews')
+    rating = models.IntegerField(default=0)
+    comment = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Review by {self.user.username} for {self.worker.profile.username} - Rating: {self.rating}'
 
 
 

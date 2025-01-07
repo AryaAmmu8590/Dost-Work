@@ -13,13 +13,13 @@ class  UserDetailsForm(forms.ModelForm):
 class WorkersDetailsForm(forms.ModelForm):
     class Meta:
         model= WorkersDetails
-        fields=['profile','id_no','image','time','amount','address']
+        fields=['profile','id_no','image','address']
 
 
 class AgencyDetailsForm(forms.ModelForm):
     class Meta:
         model = AgencyDetails
-        fields =['profile','Agency_Name','licence_id']
+        fields =['profile','agency_name','licence_id']
 
 
 

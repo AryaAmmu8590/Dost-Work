@@ -6,52 +6,116 @@ from .form import WorkersDetailsForm
 from.form import WorkersDetailsForm
 from.form import AgencyDetailsForm
 from .models import RoleChoices
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-
-
-
-from django.shortcuts import render, redirect
-
-
-
-
-# Create your views here.
+from django.contrib.auth import authenticate, login,logout
 
 
 
 def home(request):
     return render(request,"bengali/home.html")
 
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
+def logout_view(request):
+    logout(request)
+    messages.success(request, 'You have been logged out successfully.')
+    return redirect('home')
+
+
+def user_list_workers(request):
+    workers=WorkersDetails.objects.all()
+    return render(request,"user_list_workers.html",{'workers':workers})
+
+
+def user_profile(request):
+    userdetails = get_object_or_404(UserDetails, profile=request.user)
+
+    if request.method == 'POST':
+        user_details_form = UserDetailsForm(request.POST, instance=userdetails)
+
+        profile_data = {
+            'first_name': request.POST.get('first_name'),
+            'last_name': request.POST.get('last_name'),
+            'email': request.POST.get('email'),
+            'phone': request.POST.get('phone'),
+        }
+        if user_details_form.is_valid():
+            user_d=user_details_form.save(commit=False)
+            user_d.profile=request.user
+            user_d.save()
+
+            for field, value in profile_data.items():
+                setattr(request.user, field, value)
+            
+            request.user.save()
+            messages.success(request, 'Profile updated successfully.')
+            return redirect('user_profile')
+
+    if userdetails.profile is None:
+        messages.error(request, 'User profile does not exist.')
+        return redirect('user_dashboard')  
+
+    user_details_form = UserDetailsForm(instance=userdetails)  
+    return render(request, "user_profile.html", {"userdetails": userdetails, "user_details_form": user_details_form})
+
+
+def view_worker_details(request,worker_id):
+    worker=get_object_or_404(WorkersDetails,id=worker_id)
+    return render(request,"worker_details_view.html",{'worker':worker})
+
+def review_list_worker(request,worker_id):
+    rev=Review.objects.filter(worker__id=worker_id)
+    print(rev)
+    return render(request,"review_worker_list.html",{'reviews':rev,'worker_id':worker_id})
+
+
+def submit_review(request, worker_id):
+    if request.method == 'POST':
+        review_text = request.POST.get('review')
+        if review_text:
+            try:
+                review = Review(worker_id=worker_id, user=request.user, comment=review_text)
+                review.save()
+                messages.success(request, 'Your review has been submitted successfully.')
+            except Exception as e:
+                print(e)
+        else:
+            messages.error(request, 'Please provide both a review and a rating.')
+    return redirect('review_worker_list', worker_id=worker_id)
+
+
 
 def login_view(request):
     if request.method == 'POST':
         # Get username and password from the form
-        username = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
 
-        # Authenticate the user
-        user = authenticate(request, username=username, password=password)
+        print(email,password)
+        user = authenticate(request, username=email, password=password)
+        print(user)
 
         if user is not None:
-            # Log in the user
             login(request, user)
             messages.success(request, 'You have successfully logged in.')
-            return redirect('home')  # Redirect to the home page or desired location
+            if user.role == RoleChoices.USER:
+                return redirect('user_dashboard') 
+            elif user.role == RoleChoices.AGENCY:
+                return redirect('agency_dashboard') 
+            elif user.role == RoleChoices.WORKERS:
+                return redirect('worker') 
+            elif user.role == RoleChoices.ADMIN:
+                return redirect('admin_dashboard') 
         else:
-            # Invalid credentials
             messages.error(request, 'Invalid username or password.')
 
     return render(request, 'login.html')
 
-def table(request):
 
+def table(request):
     return render(request,"table.html")
+
 
 def user_registration(request):
     if request.method == 'POST':
@@ -59,15 +123,15 @@ def user_registration(request):
         
         password=request.POST.get('password')
         email=request.POST.get('email')
+        first_name=request.POST.get('first_name')
+        last_name=request.POST.get('last_name')
        
         try:
-            user=Profile.objects.create_user(username=email,password=password,email=email,role=RoleChoices.USER)
+            user=Profile.objects.create_user(first_name= first_name,last_name=last_name, username=email,password=password,email=email,role=RoleChoices.USER)
         except Exception as e:
             print(e)
             return redirect('user_registration')
             
-          
-
         if user_details_form.is_valid():
             user_details = user_details_form.save(commit=False)
             user_details.profile = user
@@ -86,13 +150,12 @@ def user_registration(request):
     })
 
 
+
 def worker_registration(request):
     if request.method == 'POST':
         worker_details_form = WorkersDetailsForm(request.POST)
-        
         password=request.POST.get('password')
         email=request.POST.get('email')
-        
         
         try:
             worker=Profile.objects.create_user(username=email,password=password,email=email,role=RoleChoices.WORKERS)
@@ -100,8 +163,6 @@ def worker_registration(request):
             print(e)
             return redirect('worker-registration')
             
-          
-
         if worker_details_form.is_valid():
             worker_details = worker_details_form.save(commit=False)
             worker_details.profile =worker
@@ -124,20 +185,18 @@ def worker_registration(request):
 def agency_registration(request):
     if request.method == 'POST':
         agency_details_form = AgencyDetailsForm(request.POST)
+        print(request.POST)
        
-        agency_name=request.POST.get('agency_name')
         email=request.POST.get('email')
         phone=request.POST.get('phone')
-        address=request.POST.get('address')
-        id=request.POST.get('id')
+        password=request.POST.get('password')
         
         try:
-            agency=Profile.objects.create_user(username=email,agency_name=agency_name,email=email,phone=phone,address=address,id=id,role=RoleChoices.AGENCY)
+            agency=Profile.objects.create_user(username=email,email=email,phone=phone,role=RoleChoices.AGENCY,password=password)
         except Exception as e:
             print(e)
             return redirect('agency_registration')
-            
-          
+
 
         if agency_details_form.is_valid():
             agency_details = agency_details_form.save(commit=False)
@@ -151,7 +210,6 @@ def agency_registration(request):
 
     else:
         agency_details_form = AgencyDetailsForm()
-
     return render(request, 'agency-reg.html', {
         'agency_details_form':AgencyDetailsForm ,
     })
@@ -160,14 +218,18 @@ def agency_registration(request):
 def signup(request):
     return render(request,"signup.html")
 
+
 def about(request):
     return render(request,"bengali/about.html")
+
 
 def blog(request):
     return render(request,"bengali/blog.html")
 
+
 def contact(request):
     return render(request,"bengali/contact.html")
+
 
 def service(request):
     return render(request,"bengali/service.html")
@@ -176,37 +238,34 @@ def service(request):
 def user_deatails_view(request):
     return render(request,"table2.html")
 
+
 def admin_dashboard(request):
     return render(request,"admin_dashboard.html")
+
 
 def user_dashboard(request):
     return render(request,"user_dashboard.html")
 
+
 def agency_dashboard(request):
     return render(request,"agency_dashboard.html")
 
+
 def worker(request):
     return render(request,"worker.html")
+
 
 def navbar(request):
     return render(request,"navbar.html")
 
 
 
-
-
-
-from django.shortcuts import render
-
-# Create your views here.
 def map(request):
     context = {
         'latitude': 11.2588,
         'longitude': 75.7804
     }
     return render(request, 'map.html', context)
-
-
 
 
 

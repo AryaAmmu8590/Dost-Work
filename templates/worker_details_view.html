@@ -1,0 +1,91 @@
+{% extends "user_base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-card">
+        <div class="profile-header">
+            <h3> Profile</h3>
+        </div>
+        <div style="display: flex;justify-content: center;">
+            <p> <img src="data:image/png;base64,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" alt="Worker Image" style="max-width: 100px;"></p>
+        </div>
+        <div class="profile-body">
+            <!-- Profile Details (View Mode) -->
+            <h4 class="section-title">Profile Details</h4>
+            <div class="profile-info">
+                <p><strong>Email:</strong> {{ worker.profile.email }}</p>
+                <p><strong>First Name:</strong> {{ worker.profile.first_name }}</p>
+                <p><strong>Last Name:</strong> {{ worker.profile.last_name }}</p>
+                <p><strong>Phone:</strong> {{ worker.profile.phone }}</p>
+                <p><strong>ID No:</strong> {{ worker.id_no }}</p>
+                <p><strong>Time:</strong> {{ worker.time }}</p>
+                <p><strong>Amount:</strong> {{ worker.amount }}</p>
+            </div>
+
+            <!-- User Details (View Mode) -->
+            <h4 class="section-title">Additional Details</h4>
+            <div class="profile-info">
+                <p><strong>Address:</strong> {{ worker.address }}</p>
+                <p><strong>Age:</strong> {{ worker.age }}</p>
+                <p><strong>Gender:</strong> {{ worker.sex|title }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Profile Container */
+    .profile-container {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    /* Profile Card */
+    .profile-card {
+        width: 100%;
+        max-width: 800px;
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    /* Header */
+    .profile-header {
+        background-color: #1e3a8a; /* Dark Blue */
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .profile-header h3 {
+        margin: 0;
+    }
+
+    /* Section Title */
+    .section-title {
+        color: #1e3a8a;
+        margin-bottom: 15px;
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    /* Profile Info */
+    .profile-info {
+        padding: 10px;
+        font-size: 1rem;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+        margin-bottom: 20px;
+    }
+
+    .profile-info p {
+        margin: 5px 0;
+    }
+</style>
+
+{% endblock %}

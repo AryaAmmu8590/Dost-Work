@@ -1,0 +1,49 @@
+{% extends "user_base.html" %}
+
+{% block content %}
+<h1 style="margin-top: 20px; text-align: center;">Reviews for {{ reviews.0.worker.profile.first_name }} {{ reviews.0.worker.profile.last_name }}</h1>
+
+<form action="{% url 'submit_review' worker_id %}" method="post" style="text-align: center; margin-bottom: 20px;">
+    {% csrf_token %}
+    <div style="display: inline-flex; align-items: center;">
+        <input type="text" name="review" placeholder="Write a review..." style="padding: 8px; border-radius: 20px; border: 1px solid #ccc; margin-right: 10px; font-size: 14px; transition: border-color 0.3s; width: 250px;" required>
+        <button type="submit" style="padding: 10px 20px; border: none; border-radius: 20px; background-color: #3498db; color: white; font-size: 14px; cursor: pointer; transition: background-color 0.3s;">Submit Review</button>
+    </div>
+</form>
+
+<div class="container" style="text-align: center; width: 100%; display: flex; justify-content: center; overflow-x: hidden;"> <!-- Centered list -->
+    <div class="reviews-container" style="max-width: 800px; width: 100%; text-align: left;"> 
+        <ul style="list-style-type: none; padding: 0;">
+            {% for review in reviews %}
+            <li style="margin-bottom: 20px;">
+                <h4>{{ review.user.first_name }} {{ review.user.last_name }}</h4>
+                <!-- <p>Rating: {{ review.rating }} / 5</p> -->
+                <p>{{ review.comment }}</p>
+                <p style="font-size: 0.9rem; color: #555;">Reviewed on: {{ review.created_at|date:"F j, Y" }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<style>
+    .reviews-container {
+        margin-top: 20px;
+        align-items: center; /* Center the review list */
+    }
+
+    .reviews-container h4 {
+        margin: 0;
+        color: #1e3a8a; /* Stylish color for names */
+    }
+
+    .reviews-container p {
+        margin: 5px 0;
+    }
+
+    input[type="text"]:focus {
+        border-color: #3498db; /* Change border color on focus */
+        outline: none; /* Remove default outline */
+    }
+</style>
+{% endblock %}

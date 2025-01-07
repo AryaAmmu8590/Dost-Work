@@ -9,6 +9,7 @@ urlpatterns = [
     
      path('',views.home,name='home'),
      path('login/',views.login_view,name='login'),
+     path('logout/',views.logout_view,name='logout'),
      path('about/',views.about,name='about'),
      path('blog/',views.blog,name='blog'),
      path('contact/',views.contact,name='contact'),
@@ -24,7 +25,20 @@ urlpatterns = [
      path('user_dashboard/',views.user_dashboard,name='user_dashboard'),
      path('agency_dashboard/',views.agency_dashboard,name='agency_dashboard'),
      path('worker/',views.worker,name='worker'),
-     path('navbar/',views.navbar,name='navbar')
+     path('navbar/',views.navbar,name='navbar'),
+
+     ## dashboards
+     path('user_list_workers/',views.user_list_workers,name='user_list_workers'),
+     path('user_profile/',views.user_profile,name='user_profile'),
+     path('view_worker_details/<int:worker_id>/',views.view_worker_details,name='view_worker_details'),
+     path('review_worker_list/<int:worker_id>/',views.review_list_worker,name='review_worker_list'),
+     path('submit_review/<int:worker_id>/',views.submit_review,name='submit_review'),
+
+     
+
+
+
+
      
      
      

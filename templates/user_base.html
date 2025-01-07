@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}User Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            display: flex;
+            flex: 1;
+            padding-top: 60px; /* Adjust for fixed header */
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #294664;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            overflow: auto;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin: 20px 0;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .sidebar ul li a:hover {
+            background-color: #34485c;
+        }
+        .sidebar ul li a i {
+            margin-right: 10px;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            flex: 1;
+        }
+        .header {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 4px 2px -2px gray;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .header .logout {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            border-radius: 5px;
+            margin-right: 30px;
+            transition: background-color 0.3s;
+        }
+        .header .logout:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Dashboard</h1>
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+            <ul>
+                <li><a href="{% url 'user_dashboard' %}"><i class="fas fa-user"></i> Dashboard</a></li>
+
+                <li><a href="{% url 'user_profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="{% url 'user_list_workers' %}"><i class="fas fa-users"></i> Workers</a></li>
+                <li><a href="{%  url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            {% block content %}
+            <h1>Welcome to the Dashboard</h1>
+            <p>This is where your main content will go.</p>
+            {% endblock %}
+        </div>
+    </div>
+
+    {% block extra_js %}
+    <!-- Optional JavaScript for additional functionality -->
+    {% endblock %}
+</body>
+</html>
