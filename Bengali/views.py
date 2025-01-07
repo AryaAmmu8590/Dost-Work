@@ -3,8 +3,8 @@ from.models import*
 from django.contrib import messages
 from .form import UserDetailsForm
 from .form import WorkersDetailsForm
-from django.contrib.auth.forms import UserCreationForm
 from.form import WorkersDetailsForm
+from.form import AgencyDetailsForm
 from .models import RoleChoices
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -55,61 +55,108 @@ def table(request):
 
 def user_registration(request):
     if request.method == 'POST':
-        user_form = UserCreationForm(request.POST)
         user_details_form = UserDetailsForm(request.POST)
+        
+        password=request.POST.get('password')
+        email=request.POST.get('email')
+       
+        try:
+            user=Profile.objects.create_user(username=email,password=password,email=email,role=RoleChoices.USER)
+        except Exception as e:
+            print(e)
+            return redirect('user_registration')
+            
+          
 
-        if user_form.is_valid() and user_details_form.is_valid():
-            user = user_form.save(commit=False)
-            user.role = RoleChoices.USER
-            user.save()
-
+        if user_details_form.is_valid():
             user_details = user_details_form.save(commit=False)
             user_details.profile = user
             user_details.save()
 
             messages.success(request, 'User registered successfully!')
             return redirect('login')
+        else:
+            print(user_details_form.errors ,user_details_form.errors)
 
     else:
-        user_form = UserCreationForm()
         user_details_form = UserDetailsForm()
 
     return render(request, 'user_registration.html', {
-        'user_form': user_form,
         'user_details_form':UserDetailsForm ,
     })
 
 
-def agency_registration(request):
-    return render(request,"agency_reg.html")
-
 def worker_registration(request):
-    
     if request.method == 'POST':
-        worker_form =  WorkersDetailsForm(request.POST)
         worker_details_form = WorkersDetailsForm(request.POST)
+        
+        password=request.POST.get('password')
+        email=request.POST.get('email')
+        
+        
+        try:
+            worker=Profile.objects.create_user(username=email,password=password,email=email,role=RoleChoices.WORKERS)
+        except Exception as e:
+            print(e)
+            return redirect('worker-registration')
+            
+          
 
-        if worker_form.is_valid() and worker_details_form.is_valid():
-            worker = worker_form.save(commit=False)
-            worker.role = RoleChoices.USER
-            worker.save()
-
+        if worker_details_form.is_valid():
             worker_details = worker_details_form.save(commit=False)
-            worker_details.profile = worker
+            worker_details.profile =worker
             worker_details.save()
 
-            messages.success(request, 'worker registered successfully!')
+            messages.success(request, 'Worker registered successfully!')
             return redirect('login')
+        else:
+            print(worker_details_form.errors ,worker_details_form.errors)
 
     else:
-        worker_form = WorkerCreationForm()
-        worker_details_form = WorkersDetailsForm()
+        worker_details_form = UserDetailsForm()
 
     return render(request, 'worker_reg.html', {
-        'worker_form': worker_form,
-        'worker_details_form': WorkersDetailsForm ,
+        'worker_details_form':WorkersDetailsForm ,
     })
+    
+    
+    
+def agency_registration(request):
+    if request.method == 'POST':
+        agency_details_form = AgencyDetailsForm(request.POST)
+       
+        agency_name=request.POST.get('agency_name')
+        email=request.POST.get('email')
+        phone=request.POST.get('phone')
+        address=request.POST.get('address')
+        id=request.POST.get('id')
+        
+        try:
+            agency=Profile.objects.create_user(username=email,agency_name=agency_name,email=email,phone=phone,address=address,id=id,role=RoleChoices.AGENCY)
+        except Exception as e:
+            print(e)
+            return redirect('agency_registration')
+            
+          
 
+        if agency_details_form.is_valid():
+            agency_details = agency_details_form.save(commit=False)
+            agency_details.profile = agency
+            agency_details.save()
+
+            messages.success(request, 'Agency registered successfully!')
+            return redirect('login')
+        else:
+            print(agency_details_form.errors ,agency_details_form.errors)
+
+    else:
+        agency_details_form = AgencyDetailsForm()
+
+    return render(request, 'agency-reg.html', {
+        'agency_details_form':AgencyDetailsForm ,
+    })
+    
+    
 def signup(request):
     return render(request,"signup.html")
 
@@ -140,6 +187,10 @@ def agency_dashboard(request):
 
 def worker(request):
     return render(request,"worker.html")
+
+def navbar(request):
+    return render(request,"navbar.html")
+
 
 
 

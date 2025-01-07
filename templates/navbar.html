@@ -5,13 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navbar</title>
-    <link rel="stylesheet" href={% static 'css/navbar.css' %}>
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
 </head>
 <body>
     <div class="navbar">
         <a href="{% url 'user_registration' %}" class="active" id="user-link">User</a>
         <a href="{% url 'worker-registration' %}" id="worker-link">Worker</a>
-        <a href="{% url 'agency-registration' %}" id="agency-link">Agency</a>
+        <a href="{% url 'agency_registration' %}" id="agency-link">Agency</a>
+    </div>
+    <div class="image-container" style="text-align: center; margin-top: 20px;">
+        <img src="{% static 'images/user.avif' %}" alt="User Image" style="max-width: 100%; height: auto; border-radius: 10px;">
     </div>
 </body>
 </html>

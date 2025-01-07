@@ -5,83 +5,203 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Worker Registration</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/worker-reg.css' %}">
-    
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container-main {
+            background: #fff;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .sub {
+            font-size: 1rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form {
+            width: 100%;
+        }
+
+        .form-field {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-field label {
+            display: block;
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-field input[type="text"],
+        .form-field input[type="email"],
+        .form-field input[type="tel"],
+        .form-field input[type="number"],
+        .form-field input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-field input[type="file"] {
+            padding: 6px;
+        }
+
+        .form-field input:focus {
+            border-color: #4facfe;
+            outline: none;
+        }
+
+        .avatar {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            background: #fda085;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 80px;
+            color: white;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            transform: translateY(-2px);
+        }
+
+        a {
+            color: #4facfe;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+        }
+    </style>
 </head>
 <body>
     <div class="container-main">
-        <div class="container">
-            <form class="form" method="POST" enctype="multipart/form-data" action="" >
-                {% csrf_token %}
-                <h1 class="title">Worker Registration</h1>
-                <p class="sub mb">Please provide your details to register</p>
-    
-                <!-- Profile Picture Field -->
-                <div class="form-field">
-                    <label class="avatar" for="file">
-                        <!-- SVG Icon for profile -->
-                    </label>
-                    {{ form.profile }} <!-- Profile picture field -->
-                </div>
-    
-                <!-- First Name -->
-                <div class="form-field">
-                    <label for="id_first_name">First Name</label>
-                    <input type="text" id="id_first_name" name="first_name" value="{{ form.first_name.value|default:'' }}" placeholder="Enter First Name" required>
-                </div>
-    
-                <!-- Last Name -->
-                <div class="form-field">
-                    <label for="id_last_name">Last Name</label>
-                    <input type="text" id="id_last_name" name="last_name" value="{{ form.last_name.value|default:'' }}" placeholder="Enter Last Name" required>
-                </div>
-    
-                <!-- ID Number -->
-                <div class="form-field">
-                    <label for="id_id_no">ID Number</label>
-                    <input type="text" id="id_id_no" name="id_no" value="{{ form.id_no.value|default:'' }}" placeholder="Enter ID Number" required>
-                </div>
-    
-                <!-- Available Time -->
-                <div class="form-field">
-                    <label for="id_time">Available Time</label>
-                    <input type="text" id="id_time" name="time" value="{{ form.time.value|default:'' }}" placeholder="Enter Available Time" required>
-                </div>
-    
-                <!-- Image -->
-                <div class="form-field">
-                    <label for="id_image">Image</label>
-                    <input type="file" id="id_image" name="image" accept="image/*">
-                </div>
-    
-                <!-- Address -->
-                <div class="form-field">
-                    <label for="id_address">Address</label>
-                    <input type="text" id="id_address" name="address" value="{{ form.address.value|default:'' }}" placeholder="Enter Address" required>
-                </div>
-    
-                <!-- Amount -->
-                <div class="form-field">
-                    <label for="id_amount">Amount</label>
-                    <input type="number" id="id_amount" name="amount" value="{{ form.amount.value|default:'' }}" placeholder="Enter Amount" required>
-                </div>
-    
-                <!-- Email -->
-                <div class="form-field">
-                    <label for="id_email">Email</label>
-                    <input type="email" id="id_email" name="email" value="{{ form.email.value|default:'' }}" placeholder="Enter Email" required>
-                </div>
-    
-                <!-- Phone -->
-                <div class="form-field">
-                    <label for="id_phone">Phone</label>
-                    <input type="tel" id="id_phone" name="phone" value="{{ form.phone.value|default:'' }}" placeholder="Enter Phone Number" required>
-                </div>
-    
-                <p class="sub">Already have an account? <a href="#">Log in</a></p>
-                <button type="submit" class="submit-btn">Register</button>
-            </form>
-        </div>
+        <form class="form" method="POST" enctype="multipart/form-data" action="">
+            {% csrf_token %}
+            <div class="avatar">&#128100;</div>
+
+            <h1 class="title">Worker Registration</h1>
+            <p class="sub">Please provide your details to register</p>
+
+            <!-- Profile Picture Field -->
+            <div class="form-field">
+                <label for="file">Profile Picture</label>
+                {{ form.profile }}
+            </div>
+
+           
+
+            <!-- First Name -->
+            <div class="form-field">
+                <label for="id_first_name">First Name</label>
+                <input type="text" id="id_first_name" name="first_name" value="{{ form.first_name.value|default:'' }}" placeholder="Enter First Name" required>
+            </div>
+
+            <!-- Last Name -->
+            <div class="form-field">
+                <label for="id_last_name">Last Name</label>
+                <input type="text" id="id_last_name" name="last_name" value="{{ form.last_name.value|default:'' }}" placeholder="Enter Last Name" required>
+            </div>
+
+            <!-- ID Number -->
+            <div class="form-field">
+                <label for="id_no">ID Number</label>
+                <input type="text" id="id_id_no" name="id_no" value="{{ form.id_no.value|default:'' }}" placeholder="Enter ID Number" required>
+            </div>
+
+            <!-- Available Time -->
+            <div class="form-field">
+                <label for="id_time">Available Time</label>
+                <input type="text" id="id_time" name="time" value="{{ form.time.value|default:'' }}" placeholder="Enter Available Time" required>
+            </div>
+
+            <!-- Image -->
+            <div class="form-field">
+                <label for="id_image">Image</label>
+                <input type="file" id="id_image" name="image" accept="image/*">
+            </div>
+
+            <!-- Address -->
+            <div class="form-field">
+                <label for="id_address">Address</label>
+                <input type="text" id="id_address" name="address" value="{{ form.address.value|default:'' }}" placeholder="Enter Address" required>
+            </div>
+
+            <!-- Amount -->
+            <div class="form-field">
+                <label for="id_amount">Amount</label>
+                <input type="number" id="id_amount" name="amount" value="{{ form.amount.value|default:'' }}" placeholder="Enter Amount" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-field">
+                <label for="id_email">Email</label>
+                <input type="email" id="id_email" name="email" value="{{ form.email.value|default:'' }}" placeholder="Enter Email" required>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-field">
+                <label for="id_phone">Phone</label>
+                <input type="tel" id="id_phone" name="phone" value="{{ form.phone.value|default:'' }}" placeholder="Enter Phone Number" required>
+            </div>
+
+            <button type="submit" class="submit-btn">Register</button>
+
+            <div class="footer">
+                Already have an account? <a href="#">Log in</a>
+            </div>
+        </form>
     </div>
 </body>
 </html>

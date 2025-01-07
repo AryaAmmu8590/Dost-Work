@@ -36,7 +36,7 @@ class Profile(AbstractUser):
 
 
 class UserDetails(models.Model):
-    profile=models.OneToOneField('Profile',on_delete=models.CASCADE,related_name="user_profile")
+    profile=models.OneToOneField('Profile',on_delete=models.CASCADE,related_name="user_profile",null=True,blank=True)
     address=models.TextField()
     age=models.IntegerField(blank=True,null=True)
     sex=models.CharField(max_length=10 ,blank=True, null=True)
@@ -49,12 +49,14 @@ class UserDetails(models.Model):
 
 
 class WorkersDetails(models.Model):
-    profile=models.OneToOneField('Profile',on_delete=models.CASCADE,related_name="worker_profile")
-    id_no=models.IntegerField(null=True)
+    profile=models.OneToOneField('Profile',on_delete=models.CASCADE,related_name="worker_profile",null=True,blank=True)
+    id_no=models.CharField(max_length=150,null=True)
     image=models.ImageField(null=True , blank=True)
     time=models.TimeField()
     amount=models.IntegerField()
     address=models.TextField()
+    
+    
 
     def __str__(self):
         return self.profile.username
@@ -64,16 +66,14 @@ class WorkersDetails(models.Model):
 
 
 class AgencyDetails(models.Model):
-     profile=models.OneToOneField('Profile',on_delete=models.CASCADE,related_name="agency_profile")
+     profile=models.OneToOneField('Profile',on_delete=models.CASCADE,related_name="agency_profile",null=True,blank=True)
      Agency_Name=models.CharField(max_length=150)
      licence_id=models.IntegerField(null=True)
+     address=models.CharField(max_length=140,null=True)
+     
 
      def __str__(self):
         return self.profile.username
-
-
-
-
 
 
 
@@ -83,17 +83,3 @@ class AgencyDetails(models.Model):
 
 
     
-    
-
-
-
-
-
-
-
-
-
-
-
-
-

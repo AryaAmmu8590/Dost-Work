@@ -15,7 +15,7 @@ urlpatterns = [
      path('service/',views.service,name='service'),
      
      path('user_registration/',views.user_registration,name='user_registration'),
-     path('agency-registration/',views.agency_registration,name='agency-registration'),
+     path('agency_registration/',views.agency_registration,name='agency_registration'),
      path('worker-registration/',views.worker_registration,name='worker-registration'),
      path('table/',views.table),
      path('signup/',views.signup,name='signup' ),
@@ -23,7 +23,9 @@ urlpatterns = [
      path('admin_dashboard/',views.admin_dashboard,name='admin_dashboard'),
      path('user_dashboard/',views.user_dashboard,name='user_dashboard'),
      path('agency_dashboard/',views.agency_dashboard,name='agency_dashboard'),
-     path('worker/',views.worker,name='worker')
+     path('worker/',views.worker,name='worker'),
+     path('navbar/',views.navbar,name='navbar')
+     
      
      
      

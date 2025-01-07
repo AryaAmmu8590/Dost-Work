@@ -1,5 +1,7 @@
 .form {
     display: flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
     gap: 10px;
     width: 300px;
@@ -13,7 +15,7 @@
     color: black;
     font-weight: bold;
     text-align: center;
-    font-size: 20px;
+    font-size: 200px;
     margin-bottom: 4px;
   }
   
@@ -25,7 +27,7 @@
   }
   
   .sub.mb {
-    margin-bottom: 1px;
+    margin-bottom: 5px;
   }
   
   .sub a {
@@ -72,5 +74,27 @@
   #file {
     display: none;
   }
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   

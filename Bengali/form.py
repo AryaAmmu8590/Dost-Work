@@ -3,6 +3,8 @@ from .models import  UserDetails,WorkersDetails,AgencyDetails
 
 
 
+
+
 class  UserDetailsForm(forms.ModelForm):
     class Meta:
         model =  UserDetails
@@ -18,4 +20,9 @@ class AgencyDetailsForm(forms.ModelForm):
     class Meta:
         model = AgencyDetails
         fields =['profile','Agency_Name','licence_id']
+
+
+
+
+
 
