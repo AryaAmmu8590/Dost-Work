@@ -1,0 +1,92 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Booking Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            margin-top: 5px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Worker Booking Details</h1>
+        <form action="{% url 'book_worker' worker_id %}"  method="POST" >
+            {% csrf_token %}
+            
+            
+
+            <label for="available-time">Available Time</label>
+            <select id="available-time" name="available_time" required>
+                <option value="">Select a time</option>
+                <option value="9am-12pm">9 AM - 12 PM</option>
+                <option value="12pm-3pm">12 PM - 3 PM</option>
+                <option value="3pm-6pm">3 PM - 6 PM</option>
+            </select>
+
+            <label for="place">Place</label>
+            <input type="text" id="place" name="place" placeholder="Enter the location" required>
+
+            <label for="additional-notes">Additional Notes</label>
+            <textarea id="additional-notes" name="additional_notes" rows="4" placeholder="Enter any additional details..."></textarea>
+
+            <button type="submit">Submit Booking</button>
+        </form>
+    </div>
+</body>
+</html>

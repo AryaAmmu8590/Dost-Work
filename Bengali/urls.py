@@ -33,7 +33,9 @@ urlpatterns = [
      path('view_worker_details/<int:worker_id>/',views.view_worker_details,name='view_worker_details'),
      path('review_worker_list/<int:worker_id>/',views.review_list_worker,name='review_worker_list'),
      path('submit_review/<int:worker_id>/',views.submit_review,name='submit_review'),
-
+     path('book_worker/<int:worker_id>/', views.book_worker, name='book_worker'),
+     path('worker_view/', views.worker_view, name='worker_view'),
+     path('user_view/', views.user_view, name='user_view'),
      
 
 

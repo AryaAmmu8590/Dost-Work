@@ -18,6 +18,7 @@
                 <div class="card-footer">
                     <a href="{% url 'view_worker_details' worker.id %}">View Profile</a>
                     <a href="{% url 'review_worker_list' worker.id %}">Review</a>
+                    <a href="{% url 'book_worker' worker.id %}">Book-worker</a>
                 </div>
             </div>
             {% endfor %}

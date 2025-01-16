@@ -86,6 +86,31 @@ def submit_review(request, worker_id):
 
 
 
+
+
+def book_worker(request,worker_id):
+    if request.method == 'POST':
+        book_worker_text = request.POST.get('book_worker')
+        if book_worker_text:
+            try:
+                book_worker = BookWorker(worker_id=worker_id, user=request.user, comment=book_worker_text)
+                book_worker.save()
+                messages.success(request, 'Your booking has been submitted successfully.')
+            except Exception as e:
+                print(e)
+        else:
+            messages.error(request, 'Please provide both a review and a rating.')
+    return render(request,"book_worker.html",{'worker_id':worker_id})
+
+
+
+
+
+
+
+
+
+
 def login_view(request):
     if request.method == 'POST':
         # Get username and password from the form
@@ -260,6 +285,12 @@ def navbar(request):
 
 
 
+   
+    
+    
+
+
+
 def map(request):
     context = {
         'latitude': 11.2588,
@@ -280,6 +311,21 @@ def save_location(request):
 
         return JsonResponse({'status': 'success', 'latitude': latitude, 'longitude': longitude})
     return JsonResponse({'status': 'fail', 'message': 'Invalid request'}, status=400)
+
+
+
+
+from .models import BookWorker
+def worker_view(request):
+    booking=BookWorker.objects.filter(worker__user=request.user)
+    print(booking,request.user)
+    
+    return render(request,"worker_view.html",{'booking':booking})
+
+def user_view(request):
+     booking=BookWorker.objects.filter(user=request.user)
+     print(booking,request.user)
+     return render(request,"user_view.html",{'booking':booking})
 
 
     

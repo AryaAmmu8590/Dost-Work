@@ -8,5 +8,6 @@ admin.site.register(UserDetails)
 admin.site.register(WorkersDetails)
 admin.site.register(AgencyDetails)
 admin.site.register(Review)
+admin.site.register(BookWorker)
 
 

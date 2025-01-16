@@ -7,20 +7,61 @@
     <title>Dashboard with Sidebar</title>
     <link rel="stylesheet" href="{% static 'css/user_dashboard.css' %}">
     <style>
-        .worker-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 16px 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
         }
 
-        .worker-card h3 {
-            margin: 0 0 8px;
+        .container {
+            display: flex;
         }
 
-        .worker-card p {
-            margin: 4px 0;
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 15px 0;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            display: block;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #34495e;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
         }
     </style>
 </head>
@@ -32,6 +73,7 @@
             <ul>
                 <li><a href="#" id="profile-link">Profile</a></li>
                 <li><a href="#" id="workers-link">Workers</a></li>
+                <li><a href="{% url 'worker_view' %}">My Tasks</a></li>
                 <li><a href="#">Logout</a></li>
             </ul>
         </div>
@@ -42,33 +84,5 @@
             <p>This is where your main content will go.</p>
         </div>
     </div>
-
-    <script>
-        const workers = [
-            { name: "John Doe", position: "Electrician", contact: "john.doe@example.com" },
-            { name: "Jane Smith", position: "Plumber", contact: "jane.smith@example.com" },
-            { name: "Bob Johnson", position: "Carpenter", contact: "bob.johnson@example.com" }
-        ];
-
-        const workersLink = document.getElementById('workers-link');
-        const mainContent = document.getElementById('main-content');
-
-        workersLink.addEventListener('click', () => {
-            mainContent.innerHTML = '<h1>Workers</h1>';
-
-            workers.forEach(worker => {
-                const card = document.createElement('div');
-                card.classList.add('worker-card');
-
-                card.innerHTML = `
-                    <h3>${worker.name}</h3>
-                    <p><strong>Position:</strong> ${worker.position}</p>
-                    <p><strong>Contact:</strong> ${worker.contact}</p>
-                `;
-
-                mainContent.appendChild(card);
-            });
-        });
-    </script>
 </body>
 </html>

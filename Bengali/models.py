@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser,Group, Permission
 
 
-
 from django.contrib.auth.models import BaseUserManager
 
 class CustomUserManager(BaseUserManager):
@@ -76,6 +75,7 @@ class WorkersDetails(models.Model):
     address=models.TextField()
     age=models.IntegerField(blank=True,null=True)
     gender=models.CharField(max_length=10 ,blank=True, null=True)
+    category=models.CharField(max_length=50,blank=True,null=True)
 
     
 
@@ -106,6 +106,20 @@ class Review(models.Model):
 
     def __str__(self):
         return f'Review by {self.user.username} for {self.worker.profile.username} - Rating: {self.rating}'
+    
+    
+    
+class BookWorker(models.Model):
+    worker = models.ForeignKey('WorkersDetails', on_delete=models.CASCADE, related_name='worker_booking')
+    user = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='user_booking')
+    time = models.TimeField(default=0)
+    place = models.TextField(blank=True, null=True)
+    additionalnotes = models.CharField(max_length=140,null=True,blank=True)
+
+    def __str__(self):
+        return f'booking by {self.user.username} for {self.worker.profile.username} '
+    
+
 
 
 
