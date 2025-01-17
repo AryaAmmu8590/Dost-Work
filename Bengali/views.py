@@ -27,15 +27,15 @@ def logout_view(request):
 
 
 
-def user_complaints(request):
-    from django.shortcuts import render, redirect
+
+from django.shortcuts import render, redirect
 from .models import UserComplaints
-from .forms import UserComplaintForm  # Assuming you have a form for UserComplaints
+from .form import UserComplaintsForm  # Assuming you have a form for UserComplaints
 from django.contrib import messages
 
 def user_complaints(request):
     if request.method == "POST":
-        form = UserComplaintForm(request.POST)
+        form = UserComplaintsForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Your complaint has been submitted successfully.")
@@ -43,7 +43,7 @@ def user_complaints(request):
         else:
             messages.error(request, "There was an error submitting your complaint. Please try again.")
     else:
-        form = UserComplaintForm()
+        form = UserComplaintsForm()
 
     complaints = UserComplaints.objects.filter(user=request.user).order_by("-created_at")
     context = {
