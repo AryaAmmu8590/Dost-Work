@@ -103,6 +103,7 @@ class Review(models.Model):
     rating = models.IntegerField(default=0)
     comment = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
 
     def __str__(self):
         return f'Review by {self.user.username} for {self.worker.profile.username} - Rating: {self.rating}'
@@ -118,6 +119,33 @@ class BookWorker(models.Model):
 
     def __str__(self):
         return f'booking by {self.user.username} for {self.worker.profile.username} '
+    
+    
+    
+    
+from django.db import models
+from django.utils.timezone import now
+
+class UserComplaints(models.Model):
+    STATUS_CHOICES = [
+        ("Open", "Open"),
+        ("In Progress", "In Progress"),
+        ("Resolved", "Resolved"),
+        ("Closed", "Closed"),
+    ]
+
+    user = models.ForeignKey( 'UserDetails',on_delete=models.CASCADE)
+    description = models.TextField()
+    category = models.CharField(max_length=255)
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="Open")
+    created_at = models.DateTimeField(default=now, editable=False)
+    updated_at = models.DateTimeField(default=now)
+
+   
+
+
+
+
     
 
 

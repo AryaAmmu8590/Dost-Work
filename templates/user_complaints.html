@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint and Employee Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: auto;
+            max-width: 1200px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .left-section, .right-section {
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .left-section {
+            width: 50%;
+            background-color: #ffffff;
+            border-right: 1px solid #ddd;
+        }
+        .right-section {
+            width: 50%;
+            background-color: #f7f9fc;
+        }
+        h2 {
+            margin-top: 0;
+            color: #0078d7;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-field {
+            margin-bottom: 20px;
+        }
+        .form-field label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        .form-field input, .form-field textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-field textarea {
+            resize: vertical;
+        }
+        .details-button {
+            padding: 10px 20px;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .details-button:hover {
+            background-color: #005bb5;
+        }
+        .submit-button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            align-self: flex-start;
+        }
+        .submit-button:hover {
+            background-color: #218838;
+        }
+        .employee-details {
+            display: none;
+            margin-top: 20px;
+            border-top: 2px solid #ddd;
+            padding-top: 10px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        ul li {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+    </style>
+    <script>
+        function toggleEmployeeDetails() {
+            const details = document.getElementById('employee-details');
+            details.style.display = details.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <h2>Complaint Details</h2>
+            <form>
+                <div class="form-field">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="4" placeholder="Enter complaint description..."></textarea>
+                </div>
+                <div class="form-field">
+                    <label for="category">Category:</label>
+                    <input type="text" id="category" name="category" placeholder="Enter category...">
+                </div>
+                <div class="form-field">
+                    <label for="status">Status:</label>
+                    <input type="text" id="status" name="status" placeholder="Enter status...">
+                </div>
+                <div class="form-field">
+                    <label for="created-at">Created At:</label>
+                    <input type="date" id="created-at" name="created-at">
+                </div>
+                <div class="form-field">
+                    <label for="updated-at">Updated At:</label>
+                    <input type="date" id="updated-at" name="updated-at">
+                </div>
+                <button type="submit" class="submit-button">Submit</button>
+            </form>
+        </div>
+        <div class="right-section">
+            <h2>Employee History</h2>
+            <button class="details-button" onclick="toggleEmployeeDetails()">Show Employee Details</button>
+            <div id="employee-details" class="employee-details">
+                <ul>
+                    <li>Joined the company on: 2020-05-10</li>
+                    <li>Promoted to Team Lead on: 2022-03-15</li>
+                    <li>Awarded Employee of the Month: July 2023</li>
+                    <li>Completed 5 major projects</li>
+                    <li>Received certification in Advanced Project Management</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

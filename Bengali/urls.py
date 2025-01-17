@@ -36,6 +36,8 @@ urlpatterns = [
      path('book_worker/<int:worker_id>/', views.book_worker, name='book_worker'),
      path('worker_view/', views.worker_view, name='worker_view'),
      path('user_view/', views.user_view, name='user_view'),
+     path('admin_booking/', views.admin_booking, name='admin_booking'),
+     path('user_complaints/',views.user_complaints,name='user_complaints'),
      
 
 

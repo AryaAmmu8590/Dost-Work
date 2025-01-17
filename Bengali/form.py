@@ -1,5 +1,5 @@
 from django import forms
-from .models import  UserDetails,WorkersDetails,AgencyDetails
+from .models import  UserDetails,WorkersDetails,AgencyDetails,UserComplaints
 
 
 
@@ -20,6 +20,13 @@ class AgencyDetailsForm(forms.ModelForm):
     class Meta:
         model = AgencyDetails
         fields =['profile','agency_name','licence_id']
+        
+        
+class UserComplaintsForm(forms.ModelForm):
+    class Meta:
+        model = UserComplaints
+        fields =['description', 'category','status']
+    
 
 
 

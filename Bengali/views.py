@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from.models import*
 from django.contrib import messages
 from .form import UserDetailsForm
@@ -17,10 +17,45 @@ from django.contrib.auth import authenticate, login,logout
 def home(request):
     return render(request,"bengali/home.html")
 
+
+
+
 def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out successfully.')
     return redirect('home')
+
+
+
+def user_complaints(request):
+    from django.shortcuts import render, redirect
+from .models import UserComplaints
+from .forms import UserComplaintForm  # Assuming you have a form for UserComplaints
+from django.contrib import messages
+
+def user_complaints(request):
+    if request.method == "POST":
+        form = UserComplaintForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your complaint has been submitted successfully.")
+            return redirect("user_complaints")
+        else:
+            messages.error(request, "There was an error submitting your complaint. Please try again.")
+    else:
+        form = UserComplaintForm()
+
+    complaints = UserComplaints.objects.filter(user=request.user).order_by("-created_at")
+    context = {
+        "complaints": complaints,
+        "form": form,
+    }
+    return render(request, "user_complaints.html", context)
+
+   
+   
+
+
 
 
 def user_list_workers(request):
@@ -130,7 +165,7 @@ def login_view(request):
                 return redirect('agency_dashboard') 
             elif user.role == RoleChoices.WORKERS:
                 return redirect('worker') 
-            elif user.role == RoleChoices.ADMIN:
+            elif user.role == RoleChoices.ADMIN or user.is_superuser:
                 return redirect('admin_dashboard') 
         else:
             messages.error(request, 'Invalid username or password.')
@@ -286,9 +321,6 @@ def navbar(request):
 
 
    
-    
-    
-
 
 
 def map(request):
@@ -315,6 +347,9 @@ def save_location(request):
 
 
 
+
+
+
 from .models import BookWorker
 def worker_view(request):
     booking=BookWorker.objects.filter(worker__user=request.user)
@@ -326,6 +361,24 @@ def user_view(request):
      booking=BookWorker.objects.filter(user=request.user)
      print(booking,request.user)
      return render(request,"user_view.html",{'booking':booking})
-
-
+ 
+ 
+ 
+def admin_booking(request):
+     booking=BookWorker.objects.all()
     
+     return render(request,"admin_booking.html",{'booking':booking})
+ 
+ 
+
+
+ 
+ 
+ 
+ 
+
+
+
+ 
+ 
+ 
