@@ -370,6 +370,13 @@ def admin_booking(request):
      return render(request,"admin_booking.html",{'booking':booking})
  
  
+ 
+ 
+def admin_settings(request):
+    return render(request,"admin_settings.html")
+
+ 
+ 
 
 
  

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Settings - Foreign Workers</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 5px solid #28a745;
+        }
+
+        header h1 {
+            font-size: 36px;
+            letter-spacing: 1px;
+        }
+
+        main {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #007bff;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #28a745, #218838);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #218838, #1c7430);
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background-color: #007bff;
+            color: white;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        tbody tr {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #e9ecef;
+        }
+
+        .edit-btn, .delete-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+
+        select, input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        select:focus, input[type="text"]:focus {
+            border-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Settings - Foreign Workers</h1>
+    </header>
+
+    <main>
+        <section id="manage-workers">
+            <h2>Manage Workers</h2>
+            <button id="add-worker-btn">Add New Worker</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Worker ID</th>
+                        <th>Name</th>
+                        <th>Nationality</th>
+                        <th>Position</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="worker-table-body">
+                    <tr>
+                        <td>001</td>
+                        <td>John Doe</td>
+                        <td>USA</td>
+                        <td>Engineer</td>
+                        <td>
+                            <button class="edit-btn">Edit</button>
+                            <button class="delete-btn">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const addWorkerBtn = document.getElementById('add-worker-btn');
+            const workerTableBody = document.getElementById('worker-table-body');
+
+            // Add New Worker
+            addWorkerBtn.addEventListener('click', () => {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td><input type="text" placeholder="Enter ID"></td>
+                    <td><input type="text" placeholder="Enter Name"></td>
+                    <td>
+                        <select>
+                            <option value="" disabled selected>Select Nationality</option>
+                            <option value="USA">USA</option>
+                            <option value="Canada">Canada</option>
+                            <option value="India">India</option>
+                            <option value="UK">UK</option>
+                            <option value="Germany">Germany</option>
+                        </select>
+                    </td>
+                    <td><input type="text" placeholder="Enter Position"></td>
+                    <td>
+                        <button onclick="saveNewWorker(this)">Save</button>
+                        <button onclick="cancelNewWorker(this)">Cancel</button>
+                    </td>
+                `;
+                workerTableBody.appendChild(newRow);
+            });
+
+            // Edit and Save Worker
+            workerTableBody.addEventListener('click', (event) => {
+                const target = event.target;
+                if (target.classList.contains('edit-btn')) {
+                    const row = target.closest('tr');
+                    const cells = row.querySelectorAll('td');
+                    const id = cells[0].innerText;
+                    const name = cells[1].innerText;
+                    const nationality = cells[2].innerText;
+                    const position = cells[3].innerText;
+
+                    cells[0].innerHTML = `<input type="text" value="${id}">`;
+                    cells[1].innerHTML = `<input type="text" value="${name}">`;
+                    cells[2].innerHTML = `
+                        <select>
+                            <option value="USA" ${nationality === 'USA' ? 'selected' : ''}>USA</option>
+                            <option value="Canada" ${nationality === 'Canada' ? 'selected' : ''}>Canada</option>
+                            <option value="India" ${nationality === 'India' ? 'selected' : ''}>India</option>
+                            <option value="UK" ${nationality === 'UK' ? 'selected' : ''}>UK</option>
+                            <option value="Germany" ${nationality === 'Germany' ? 'selected' : ''}>Germany</option>
+                        </select>
+                    `;
+                    cells[3].innerHTML = `<input type="text" value="${position}">`;
+                    target.textContent = 'Save';
+                    target.classList.remove('edit-btn');
+                    target.classList.add('save-btn');
+                } else if (target.classList.contains('save-btn')) {
+                    const row = target.closest('tr');
+                    const inputs = row.querySelectorAll('input, select');
+                    const values = Array.from(inputs).map(input => input.value);
+
+                    row.innerHTML = `
+                        <td>${values[0]}</td>
+                        <td>${values[1]}</td>
+                        <td>${values[2]}</td>
+                        <td>${values[3]}</td>
+                        <td>
+                            <button class="edit-btn">Edit</button>
+                            <button class="delete-btn">Delete</button>
+                        </td>
+                    `;
+                }
+            });
+
+            // Delete Worker
+            workerTableBody.addEventListener('click', (event) => {
+                if (event.target.classList.contains('delete-btn')) {
+                    const row = event.target.closest('tr');
+                    row.remove();
+                }
+            });
+        });
+
+        function saveNewWorker(button) {
+            const row = button.closest('tr');
+            const inputs = row.querySelectorAll('input, select');
+            const values = Array.from(inputs).map(input => input.value);
+
+            if (values.every(value => value.trim() !== '')) {
+                row.innerHTML = `
+                    <td>${values[0]}</td>
+                    <td>${values[1]}</td>
+                    <td>${values[2]}</td>
+                    <td>${values[3]}</td>
+                    <td>
+                        <button class="edit-btn">Edit</button>
+                        <button class="delete-btn">Delete</button>
+                    </td>
+                `;
+            } else {
+                alert('All fields are required.');
+            }
+        }
+
+        function cancelNewWorker(button) {
+            button.closest('tr').remove();
+        }
+    </script>
+</body>
+</html>
