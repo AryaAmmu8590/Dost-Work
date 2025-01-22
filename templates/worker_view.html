@@ -57,6 +57,12 @@
       <p><strong>place:</strong> {{item.place}}</p>
       <p><strong>Additional Notes</strong> {{item.additionalnotes}}</p>
       <p><strong>Time:</strong> 9:00 AM - 5:00 PM</p>
+      <p><strong><div class="text-center">
+        <a href="tel:{{ user.phone }}" class="btn-call" style="background: linear-gradient(90deg, #34d399, #10b981); color: white; border: none; padding: 10px 25px; font-size: 1rem; border-radius: 30px; text-decoration: none; cursor: pointer; transition: background 0.3s ease, transform 0.2s ease; display: inline-block;">
+            Call {{ item.user.phone }}
+        </a>
+    </div>
+    </strong></p>
     </div>
   {% endfor %}
  

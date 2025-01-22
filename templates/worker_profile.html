@@ -1,4 +1,4 @@
-{% extends "user_base.html" %}
+
 {% load static %}
 
 {% block content %}
@@ -10,38 +10,42 @@
         <div class="profile-body">
             <form method="post" action="{% url 'user_profile' %}">
                 {% csrf_token %}
-
+                
                 <!-- Profile Details (View Mode) -->
                 <h4 class="section-title">Profile Details</h4>
                 <div class="form-group">
-                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                    <label for="email">Email</label>
                     <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="first_name"><i class="fas fa-user"></i> First Name</label>
+                    <label for="first_name">First Name</label>
                     <input type="text" id="first_name" name="first_name" class="form-control" value="{{ user.first_name }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="last_name"><i class="fas fa-user"></i> Last Name</label>
+                    <label for="last_name">Last Name</label>
                     <input type="text" id="last_name" name="last_name" class="form-control" value="{{ user.last_name }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="phone"><i class="fas fa-phone"></i> Phone</label>
+                    <label for="phone">Phone</label>
                     <input type="text" id="phone" name="phone" class="form-control" value="{{ user.phone }}" readonly>
                 </div>
+                <!-- <div class="form-group">
+                    <label for="role">Role</label>
+                    <input type="text" id="role" name="role" class="form-control" value="{{ user.get_role_display }}" readonly>
+                </div> -->
 
                 <!-- User Details (View Mode) -->
                 <h4 class="section-title">Additional Details</h4>
                 <div class="form-group">
-                    <label for="address"><i class="fas fa-map-marker-alt"></i> Address</label>
+                    <label for="address">Address</label>
                     <textarea id="address" name="address" class="form-control" rows="3" readonly>{{ userdetails.address }}</textarea>
                 </div>
                 <div class="form-group">
-                    <label for="age"><i class="fas fa-birthday-cake"></i> Age</label>
+                    <label for="age">Age</label>
                     <input type="number" id="age" name="age" class="form-control" value="{{ userdetails.age }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="sex"><i class="fas fa-venus-mars"></i> Gender</label>
+                    <label for="sex">Gender</label>
                     <div style="display: flex; gap: 15px;">
                         <label>
                             <input type="radio" name="sex" value="Male" {% if userdetails.sex == 'male' %}checked{% endif %} disabled> Male
@@ -83,53 +87,41 @@
 </script>
 
 <style>
-    /* Background and Layout */
-    body {
-        font-family: 'Arial', sans-serif;
-        background: linear-gradient(to bottom right, #4f46e5, #22d3ee);
-        margin: 0;
-        padding: 0;
-    }
-
+    /* Profile Container */
     .profile-container {
         display: flex;
         justify-content: center;
-        padding: 40px;
-        min-height: 100vh;
-        align-items: center;
+        padding: 20px;
     }
 
     /* Profile Card */
     .profile-card {
         width: 100%;
-        max-width: 700px;
+        max-width: 800px;
         background-color: #fff;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        padding: 30px;
-        animation: fadeIn 1s;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: scale(0.9); }
-        to { opacity: 1; transform: scale(1); }
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
     }
 
     /* Header */
     .profile-header {
-        background: linear-gradient(to right, #4f46e5, #22d3ee);
+        background-color: #1e3a8a; /* Dark Blue */
         color: white;
-        padding: 15px 20px;
-        border-radius: 15px;
+        padding: 10px 20px;
+        border-radius: 10px;
         text-align: center;
-        margin-bottom: 20px;
+    }
+
+    .profile-header h3 {
+        margin: 0;
     }
 
     /* Section Title */
     .section-title {
-        color: #4f46e5;
+        color: #1e3a8a;
         margin-bottom: 15px;
-        font-size: 1.4rem;
+        font-size: 1.25rem;
         font-weight: bold;
     }
 
@@ -139,59 +131,46 @@
     }
 
     .form-group label {
-        display: block;
-        color: #4f46e5;
+        color: #1e3a8a;
         font-weight: bold;
-        margin-bottom: 5px;
     }
 
-    .form-group input, .form-group textarea {
+    .form-group input, .form-group textarea, .form-group select {
         width: 100%;
         padding: 10px;
         font-size: 1rem;
         border-radius: 10px;
         border: 1px solid #ddd;
-        transition: box-shadow 0.3s ease;
     }
 
-    .form-group input:focus, .form-group textarea:focus {
-        box-shadow: 0 0 5px rgba(79, 70, 229, 0.5);
-        border-color: #4f46e5;
-    }
-
-    /* Buttons */
-    .btn {
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-
+    /* Button Styling */
     .btn-edit {
-        background: linear-gradient(to right, #f59e0b, #d97706);
+        background-color: #f59e0b;
         color: white;
+        border: none;
         padding: 10px 20px;
         font-size: 1rem;
-        border-radius: 10px;
-        border: none;
+        border-radius: 5px;
         cursor: pointer;
     }
 
     .btn-edit:hover {
-        transform: scale(1.05);
-        box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
+        background-color: #d97706;
     }
 
     .btn-save {
-        background: linear-gradient(to right, #10b981, #059669);
+        background-color: #10b981;
         color: white;
+        border: none;
         padding: 10px 20px;
         font-size: 1rem;
-        border-radius: 10px;
-        border: none;
+        border-radius: 5px;
         cursor: pointer;
     }
 
     .btn-save:hover {
-        transform: scale(1.05);
-        box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        background-color: #059669;
     }
 </style>
+
 {% endblock %}

@@ -76,6 +76,8 @@ class WorkersDetails(models.Model):
     age=models.IntegerField(blank=True,null=True)
     gender=models.CharField(max_length=10 ,blank=True, null=True)
     category=models.CharField(max_length=50,blank=True,null=True)
+    approved_by_worker=models.BooleanField(default=False)
+    agency=models.ForeignKey('AgencyDetails',on_delete=models.CASCADE,related_name="agency_worker",null=True,blank=True)
 
     
 
@@ -113,7 +115,7 @@ class Review(models.Model):
 class BookWorker(models.Model):
     worker = models.ForeignKey('WorkersDetails', on_delete=models.CASCADE, related_name='worker_booking')
     user = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='user_booking')
-    time = models.TimeField(default=0)
+    time = models.CharField(default=0, max_length=150)
     place = models.TextField(blank=True, null=True)
     additionalnotes = models.CharField(max_length=140,null=True,blank=True)
 

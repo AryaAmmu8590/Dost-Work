@@ -30,6 +30,7 @@ urlpatterns = [
      ## dashboards
      path('user_list_workers/',views.user_list_workers,name='user_list_workers'),
      path('user_profile/',views.user_profile,name='user_profile'),
+     path('worker_profile/',views.worker_profile,name='worker_profile'),
      path('view_worker_details/<int:worker_id>/',views.view_worker_details,name='view_worker_details'),
      path('review_worker_list/<int:worker_id>/',views.review_list_worker,name='review_worker_list'),
      path('submit_review/<int:worker_id>/',views.submit_review,name='submit_review'),

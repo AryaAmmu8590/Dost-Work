@@ -69,15 +69,14 @@
         <form action="{% url 'book_worker' worker_id %}"  method="POST" >
             {% csrf_token %}
             
-            
-
             <label for="available-time">Available Time</label>
             <select id="available-time" name="available_time" required>
                 <option value="">Select a time</option>
-                <option value="9am-12pm">9 AM - 12 PM</option>
-                <option value="12pm-3pm">12 PM - 3 PM</option>
-                <option value="3pm-6pm">3 PM - 6 PM</option>
+                <option value="09:00:00-12:00:00">09:00:00 - 12:00:00</option>
+                <option value="12:00:00-15:00:00">12:00:00 - 15:00:00</option>
+                <option value="15:00:00-18:00:00">15:00:00 - 18:00:00</option>
             </select>
+            
 
             <label for="place">Place</label>
             <input type="text" id="place" name="place" placeholder="Enter the location" required>

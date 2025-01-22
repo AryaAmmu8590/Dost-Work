@@ -125,16 +125,15 @@ def submit_review(request, worker_id):
 
 def book_worker(request,worker_id):
     if request.method == 'POST':
-        book_worker_text = request.POST.get('book_worker')
-        if book_worker_text:
-            try:
-                book_worker = BookWorker(worker_id=worker_id, user=request.user, comment=book_worker_text)
-                book_worker.save()
-                messages.success(request, 'Your booking has been submitted successfully.')
-            except Exception as e:
-                print(e)
-        else:
-            messages.error(request, 'Please provide both a review and a rating.')
+        book_worker_text = request.POST.get('additional_notes')
+        time=request.POST.get('available_time')
+        try:
+            book_worker = BookWorker(worker_id=worker_id, user=request.user,  additionalnotes=book_worker_text,  time=time)
+            book_worker.save()
+            messages.success(request, 'Your booking has been submitted successfully.')
+        except Exception as e:
+            print(e)
+       
     return render(request,"book_worker.html",{'worker_id':worker_id})
 
 
@@ -212,10 +211,14 @@ def user_registration(request):
 
 
 def worker_registration(request):
+    agencies=AgencyDetails.objects.all()
     if request.method == 'POST':
         worker_details_form = WorkersDetailsForm(request.POST)
         password=request.POST.get('password')
         email=request.POST.get('email')
+        agency=request.POST.get('agency')
+        print(agency,'kasdfaf')
+        # agency=get_object_or_404(AgencyDetails,id=agency_id)
         
         try:
             worker=Profile.objects.create_user(username=email,password=password,email=email,role=RoleChoices.WORKERS)
@@ -226,6 +229,7 @@ def worker_registration(request):
         if worker_details_form.is_valid():
             worker_details = worker_details_form.save(commit=False)
             worker_details.profile =worker
+            worker_details.agency=agency
             worker_details.save()
 
             messages.success(request, 'Worker registered successfully!')
@@ -238,6 +242,7 @@ def worker_registration(request):
 
     return render(request, 'worker_reg.html', {
         'worker_details_form':WorkersDetailsForm ,
+        'agencies':agencies,
     })
     
     
@@ -352,7 +357,7 @@ def save_location(request):
 
 from .models import BookWorker
 def worker_view(request):
-    booking=BookWorker.objects.filter(worker__user=request.user)
+    booking=BookWorker.objects.filter(worker__profile=request.user)
     print(booking,request.user)
     
     return render(request,"worker_view.html",{'booking':booking})
@@ -374,6 +379,44 @@ def admin_booking(request):
  
 def admin_settings(request):
     return render(request,"admin_settings.html")
+
+
+
+
+
+
+
+def worker_profile(request):
+    userdetails = get_object_or_404(WorkersDetails, profile=request.user)
+
+    if request.method == 'POST':
+        worker_details_form = WorkersDetailsForm(request.POST, instance=userdetails)
+
+        profile_data = {
+            'first_name': request.POST.get('first_name'),
+            'last_name': request.POST.get('last_name'),
+            'email': request.POST.get('email'),
+            'phone': request.POST.get('phone'),
+        }
+        if worker_details_form.is_valid():
+            worker_d=worker_details_form.save(commit=False)
+            worker_d.profile=request.user
+            worker_d.save()
+
+            for field, value in profile_data.items():
+                setattr(request.user, field, value)
+            
+            request.user.save()
+            messages.success(request, 'Profile updated successfully.')
+            return redirect('worker_profile')
+
+    if userdetails.profile is None:
+        messages.error(request, 'worker profile does not exist.')
+        return redirect('worker_dashboard')  
+
+    worker_details_form =WorkersDetailsForm(instance=userdetails)  
+    return render(request, "worker_profile.html", {"userdetails": userdetails, "worker_details_form": worker_details_form})
+
 
  
  
