@@ -189,9 +189,9 @@
                 <input type="text" id="id_id_no" name="id_no" value="{{ form.id_no.value|default:'' }}" placeholder="Enter ID Number" required>
             </div>
             <!-- Category Dropdown -->
-            <div class="form-field">
-                <label for="id_category">Category</label>
-                <select id="id_category" name="category" required>
+            <div class="form-field" style="margin-bottom: 20px;">
+                <label for="id_category" style="color: #1e3a8a; font-weight: bold;">Category</label>
+                <select id="id_category" name="category" required style="background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 10px; padding: 12px; font-size: 1rem; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); transition: border-color 0.3s, box-shadow 0.3s;">
                     <option value="" disabled selected>Select a category</option>
                     <option value="plumber">Plumber</option>
                     <option value="electrician">Electrician</option>
@@ -201,17 +201,30 @@
                     <option value="cleaner">Cleaner</option>
                     <option value="driver">Driver</option>
                     <option value="other">Other</option>
+                    <option value="mason">Mason</option>
+                    <option value="welder">Welder</option>
+                    <option value="chef">Chef</option>
+                    <option value="nurse">Nurse</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="construction_worker">Construction Worker</option>
+                    <option value="security_guard">Security Guard</option>
+                    <option value="housekeeper">Housekeeper</option>
+                    <option value="driver">Driver</option>
+                    <option value="technician">Technician</option>
+                    <option value="laborer">Laborer</option>
                 </select>
             </div>
+            
             <div class="form-group" style="margin-bottom: 20px;">
                 <label for="agency" style="color: #1e3a8a; font-weight: bold;">Select Agency</label>
                 <select id="agency" name="agency" class="form-control" style="background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 10px; padding: 12px; font-size: 1rem; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); transition: border-color 0.3s, box-shadow 0.3s;">
                     <option value="" disabled selected>Select an agency</option>
                     {% for agency in agencies %}
-                    <option value="agency1">{{agency.agency_name}}</option>
-                  {% endfor %}
+                    <option value="{{ agency.id }}">{{ agency.agency_name }}</option>
+                    {% endfor %}
                 </select>
             </div>
+            
             
 
 

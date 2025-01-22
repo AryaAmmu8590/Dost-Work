@@ -216,9 +216,8 @@ def worker_registration(request):
         worker_details_form = WorkersDetailsForm(request.POST)
         password=request.POST.get('password')
         email=request.POST.get('email')
-        agency=request.POST.get('agency')
-        print(agency,'kasdfaf')
-        # agency=get_object_or_404(AgencyDetails,id=agency_id)
+        agency_id=request.POST.get('agency')
+        agency=get_object_or_404(AgencyDetails,id=agency_id)
         
         try:
             worker=Profile.objects.create_user(username=email,password=password,email=email,role=RoleChoices.WORKERS)

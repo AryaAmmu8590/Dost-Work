@@ -69,10 +69,10 @@
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <h2>USER</h2>
+            <h2>WORKER</h2>
             <ul>
-                <li><a href="#" id="profile-link">Profile</a></li>
-                <li><a href="#" id="workers-link">Workers</a></li>
+                <li><a href="{% url 'worker_profile' %}" id="profile-link">Profile</a></li>
+                
                 <li><a href="{% url 'worker_view' %}">My Tasks</a></li>
                 <li><a href="#">Logout</a></li>
             </ul>
