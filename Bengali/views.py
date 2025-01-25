@@ -417,6 +417,13 @@ def worker_profile(request):
     return render(request, "worker_profile.html", {"userdetails": userdetails, "worker_details_form": worker_details_form})
 
 
+
+
+
+def complaints_replay(request):
+    return render(request,"complaints_replay.html")
+
+
  
  
 
