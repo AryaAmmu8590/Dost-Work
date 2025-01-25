@@ -40,7 +40,7 @@ urlpatterns = [
      path('admin_booking/', views.admin_booking, name='admin_booking'),
      path('user_complaints/',views.user_complaints,name='user_complaints'),
      path('admin_settings/',views.admin_settings,name='admin_settings'),
-     path('complaints_replay/',views.complaints_replay,name='complaints_reply'),
+     path('complaints_replay/',views.complaints_replay,name='complaints_replay'),
      
      
 

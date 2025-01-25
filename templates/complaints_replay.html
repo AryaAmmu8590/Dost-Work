@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agency Complaints</title>
+    <title>View All Complaints</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -86,22 +86,20 @@
 </header>
 
 <div class="container">
-    <h1>Complaints</h1>
-
-    <div class="complaint">
-       
-        <p><strong>User:</strong> John Doe</p>
-        <p><strong>Complaint:</strong> The worker was late and didn’t complete the assigned task properly.</p>
-
-        <div class="response">
-            <label for="response1">Your Reply:</label>
-            <textarea id="response1" placeholder="Write your response here..."></textarea>
-            <button>Submit Reply</button>
-        </div>
-        
-    </div>
+    <h1>View All Complaints</h1>
 
    
+    <div class="complaint">
+        <p><strong>User:</strong> {{ complaint.user_name }}</p>
+        <p><strong>Complaint:</strong> {{ complaint.details }}</p>
+
+        <div class="response">
+            <label for="response_{{ complaint.id }}">Your Reply:</label>
+            <textarea id="response_{{ complaint.id }}" placeholder="Write your response here..."></textarea>
+            <button>Submit Reply</button>
+        </div>
+    </div>
+    
 
 </div>
 
