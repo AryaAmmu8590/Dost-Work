@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        .btn-container {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .approve {
+            background-color: #28a745;
+            color: white;
+        }
+        .reject {
+            background-color: #dc3545;
+            color: white;
+        }
+        .view {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Worker Details</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Worker ID</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for worker in workers %}
+                <td>{{worker.id_no}}</td>
+                <td>{{worker.profile.first_name}}</td>
+                <td>{{worker.profile.email}}</td>
+                <td>{{worker.profile.phone}}</td>
+                <td>{{worker.profile.address}}</td>
+                <td>
+                    <div class="btn-container">
+                        <a href="{% url 'approve_worker' worker.id %}"><button class="btn approve"">{% if worker.approved_by_agency %}Approved{% else %}Approve{% endif %}</button></a>
+                        <a href="{% url 'reject_worker' worker.id %}">  <button class="btn reject" ">Reject</button></a>
+                        <a href="tel:{{ worker.phone }}"">  <button class="btn approve" ">Call</button></a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        function approveWorker(workerId) {
+            alert("Worker " + workerId + " approved!");
+            // Add AJAX request here if needed
+        }
+
+        function rejectWorker(workerId) {
+            alert("Worker " + workerId + " rejected!");
+            // Add AJAX request here if needed
+        }
+
+        function viewProfile(workerId) {
+            window.location.href = "profile.html?id=" + workerId; // Replace with actual profile URL
+        }
+    </script>
+
+</body>
+</html>

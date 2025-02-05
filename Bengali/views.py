@@ -424,12 +424,54 @@ def complaints_replay(request):
     return render(request,"complaints_replay.html")
 
 
- 
+def agency_profile(request):
+    agencydetails = get_object_or_404(AgencyDetails, profile=request.user)
+
+    if request.method == 'POST':
+        agency_details_form = AgencyDetailsForm(request.POST, instance=agencydetails)
+
+        profile_data = {
+            'first_name': request.POST.get('first_name'),
+            'last_name': request.POST.get('last_name'),
+            'email': request.POST.get('email'),
+            'phone': request.POST.get('phone'),
+        }
+        if agency_details_form.is_valid():
+            agency_d=agency_details_form.save(commit=False)
+            agency_d.profile=request.user
+            agency_d.save()
+
+            for field, value in profile_data.items():
+                setattr(request.user, field, value)
+            
+            request.user.save()
+            messages.success(request, 'Profile updated successfully.')
+            return redirect('agency_profile')
+
+    if agencydetails.profile is None:
+        messages.error(request, 'Agency profile does not exist.')
+        return redirect('agency_dashboard')  
+
+    agency_details_form = AgencyDetailsForm(instance=agencydetails)  
+    return render(request, "agency_profile.html", {"agencydetails": agencydetails, "agency_details_form": agency_details_form})
  
 
+def agency_workers(request):
+    workers=WorkersDetails.objects.all()
+    print(workers)
+    return render(request,"agency_workers.html",{'workers':workers})
+ 
 
+def approve_worker(request,worker_id):
+    worker=WorkersDetails.objects.get(id=worker_id)
+    worker.approved_by_agency=True
+    worker.save()
+    return redirect('agency_workers')
  
- 
+def reject_worker(request,worker_id):
+    worker=WorkersDetails.objects.get(id=worker_id)
+    worker.delete()
+    return redirect('agency_workers')
  
  
 

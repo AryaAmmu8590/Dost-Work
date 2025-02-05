@@ -19,7 +19,7 @@ class WorkersDetailsForm(forms.ModelForm):
 class AgencyDetailsForm(forms.ModelForm):
     class Meta:
         model = AgencyDetails
-        fields =['profile','agency_name','licence_id']
+        fields =['profile','agency_name','licence_id','address']
         
         
 class UserComplaintsForm(forms.ModelForm):

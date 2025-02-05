@@ -41,7 +41,10 @@ urlpatterns = [
      path('user_complaints/',views.user_complaints,name='user_complaints'),
      path('admin_settings/',views.admin_settings,name='admin_settings'),
      path('complaints_replay/',views.complaints_replay,name='complaints_replay'),
-     
+     path('agency_profile/',views.agency_profile,name='agency_profile'),
+     path('agency_workers/',views.agency_workers,name='agency_workers'),
+     path('approve_worker/<int:worker_id>/',views.approve_worker,name='approve_worker'),
+     path('reject_worker/<int:worker_id>/',views.reject_worker,name='reject_worker'),
      
 
 

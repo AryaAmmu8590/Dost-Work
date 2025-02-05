@@ -76,7 +76,7 @@ class WorkersDetails(models.Model):
     age=models.IntegerField(blank=True,null=True)
     gender=models.CharField(max_length=10 ,blank=True, null=True)
     category=models.CharField(max_length=50,blank=True,null=True)
-    approved_by_worker=models.BooleanField(default=False)
+    approved_by_agency=models.BooleanField(default=False)
     agency=models.ForeignKey('AgencyDetails',on_delete=models.CASCADE,related_name="agency_worker",null=True,blank=True)
 
     

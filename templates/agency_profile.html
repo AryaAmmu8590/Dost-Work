@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Agency Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Edit Agency Profile</h2>
+        <form action="{% url 'agency_profile' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Agency Name -->
+            <div class="form-group">
+                <label for="agency-name">Agency Name:</label>
+                <input type="text" id="agency-name" value="{{ user.agency_profile.agency_name }}"  name="agency_name" placeholder="Enter agency name" required>
+            </div>
+
+            <!-- License ID -->
+            <div class="form-group">
+                <label for="licence-id">License ID:</label>
+                <input type="text" value="{{ user.agency_profile.licence_id }}" id="licence-id" name="licence_id" placeholder="Enter license ID">
+            </div>
+
+            <!-- Address -->
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" value="{{ user.agency_profile.address }}" placeholder="Enter agency address">
+            </div>
+
+            <!-- Username -->
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" value="{{ user.username }}"  placeholder="Enter username" required>
+            </div>
+
+            <!-- First Name -->
+            <div class="form-group">
+                <label for="first-name">First Name:</label>
+                <input type="text" id="first-name" value="{{ user.first_name }}"  name="first_name" placeholder="Enter first name" required>
+            </div>
+
+            <!-- Last Name -->
+            <div class="form-group">
+                <label for="last-name">Last Name:</label>
+                <input type="text" id="last-name" value="{{ user.last_name }}"  name="last_name" placeholder="Enter last name" required>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" value="{{ user.phone }}"  name="phone" placeholder="Enter phone number" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" value="{{ user.email }}" id="email" name="email" placeholder="Enter email" required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <input type="submit" value="Save Changes">
+            </div>
+        </form>
+    </div>
+</body>
+</html>
