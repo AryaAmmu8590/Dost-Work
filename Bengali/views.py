@@ -39,7 +39,7 @@ def user_complaints(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Your complaint has been submitted successfully.")
-            return redirect("user_complaints")
+            return redirect("user_dashboard")
         else:
             messages.error(request, "There was an error submitting your complaint. Please try again.")
     else:
@@ -53,7 +53,22 @@ def user_complaints(request):
     return render(request, "user_complaints.html", context)
 
    
-   
+from django.shortcuts import render
+from .models import AgencyDetails
+
+def agency_details(request):
+    agencies = AgencyDetails.objects.all()
+    return render(request, 'agency_details.html', {'agencies': agencies})
+
+
+from django.shortcuts import render
+from .models import WorkersDetails
+
+def workers_details(request):
+    workers = WorkersDetails.objects.all()  # Fetch all workers data
+    return render(request, 'workers_details.html', {'workers': workers})
+
+
 
 
 
@@ -379,6 +394,9 @@ def admin_booking(request):
 def admin_settings(request):
     return render(request,"admin_settings.html")
 
+def reports(request):
+    complaints = UserComplaints.objects.all()  # Fetch all complaints from the database
+    return render(request, 'reports.html', {'complaints': complaints})
 
 
 

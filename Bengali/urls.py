@@ -45,6 +45,10 @@ urlpatterns = [
      path('agency_workers/',views.agency_workers,name='agency_workers'),
      path('approve_worker/<int:worker_id>/',views.approve_worker,name='approve_worker'),
      path('reject_worker/<int:worker_id>/',views.reject_worker,name='reject_worker'),
+     path('reports', views.reports, name='reports'),
+     path('agency_details/', views.agency_details, name='agency_details'),
+     path('workers_details/', views.workers_details, name='workers_details'),
+
      
 
 

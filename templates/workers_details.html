@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workers Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 5px solid #28a745;
+        }
+
+        header h1 {
+            font-size: 36px;
+            letter-spacing: 1px;
+        }
+
+        main {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #007bff;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background-color: #007bff;
+            color: white;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        tbody tr {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #e9ecef;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Workers Details</h1>
+    </header>
+
+    <main>
+        <section id="workers-details">
+            <h2>Manage Workers</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Profile Username</th>
+                        <th>ID Number</th>
+                        <th>Image</th>
+                        <th>Address</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in workers %}
+                    <tr>
+                        <td>{{ a.profile.username }}</td>
+                        <td>{{ a.id_no }}</td>
+                        <td><img src="{{ a.image.url }}" alt="Image" width="50" height="50"></td>
+                        <td>{{ a.address }}</td>
+                        <td>{{ a.age }}</td>
+                        <td>{{ a.gender }}</td>
+                        <td>{{ a.category }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">No workers found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>
