@@ -34,13 +34,23 @@ from .form import UserComplaintsForm  # Assuming you have a form for UserComplai
 from django.contrib import messages
 
 def user_complaints(request):
+   
+    worker_id=request.GET.get('id')
+    if worker_id and worker_id !='':
+        worker=get_object_or_404(WorkersDetails,id_no=worker_id)
+    else:
+        worker=''
     if request.method == "POST":
         form = UserComplaintsForm(request.POST)
         if form.is_valid():
-            form.save()
+            obj=form.save(commit=False)
+            obj.user=request.user
+            obj.status='Open'
+            obj.save()
             messages.success(request, "Your complaint has been submitted successfully.")
             return redirect("user_dashboard")
         else:
+            print(form.errors)
             messages.error(request, "There was an error submitting your complaint. Please try again.")
     else:
         form = UserComplaintsForm()
@@ -48,8 +58,10 @@ def user_complaints(request):
     complaints = UserComplaints.objects.filter(user=request.user).order_by("-created_at")
     context = {
         "complaints": complaints,
+        'worker':worker,
         "form": form,
     }
+    print(worker,worker_id)
     return render(request, "user_complaints.html", context)
 
    
@@ -142,14 +154,30 @@ def book_worker(request,worker_id):
     if request.method == 'POST':
         book_worker_text = request.POST.get('additional_notes')
         time=request.POST.get('available_time')
+        place=request.POST.get('place')
         try:
-            book_worker = BookWorker(worker_id=worker_id, user=request.user,  additionalnotes=book_worker_text,  time=time)
+            book_worker = BookWorker(worker_id=worker_id, user=request.user, additionalnotes=book_worker_text,  time=time, place=place)
             book_worker.save()
+              # Create a notification for the worker
+            notification_message = f'You have a new booking from {request.user.email} at {place} on {time}.'
+            Notification.objects.create(
+                recipient=worker.profile,
+                sender=request.user,
+                message=notification_message
+            )
             messages.success(request, 'Your booking has been submitted successfully.')
         except Exception as e:
             print(e)
        
     return render(request,"book_worker.html",{'worker_id':worker_id})
+
+
+from django.shortcuts import render
+from .models import Notification
+
+def admin_noty(request):
+    notifications = Notification.objects.filter(recipient=request.user).order_by('-created_at')
+    return render(request, "admin_noty.html", {'notifications': notifications})
 
 
 
@@ -199,9 +227,10 @@ def user_registration(request):
         email=request.POST.get('email')
         first_name=request.POST.get('first_name')
         last_name=request.POST.get('last_name')
+        age=request.POST.get('age')
        
         try:
-            user=Profile.objects.create_user(first_name= first_name,last_name=last_name, username=email,password=password,email=email,role=RoleChoices.USER)
+            user=Profile.objects.create_user(first_name= first_name,last_name=last_name, username=email,password=password,email=email,age=age,role=RoleChoices.USER)
         except Exception as e:
             print(e)
             return redirect('user_registration')
@@ -214,6 +243,7 @@ def user_registration(request):
             messages.success(request, 'User registered successfully!')
             return redirect('login')
         else:
+            user.delete()
             print(user_details_form.errors ,user_details_form.errors)
 
     else:
@@ -232,10 +262,13 @@ def worker_registration(request):
         password=request.POST.get('password')
         email=request.POST.get('email')
         agency_id=request.POST.get('agency')
+        first_name=request.POST.get('first_name')
+        last_name=request.POST.get('last_name')
+        agency_id=request.POST.get('agency')
         agency=get_object_or_404(AgencyDetails,id=agency_id)
         
         try:
-            worker=Profile.objects.create_user(username=email,password=password,email=email,role=RoleChoices.WORKERS)
+            worker=Profile.objects.create_user(username=email,password=password,email=email,role=RoleChoices.WORKERS,first_name=first_name,last_name=last_name)
         except Exception as e:
             print(e)
             return redirect('worker-registration')
@@ -327,7 +360,11 @@ def user_dashboard(request):
 
 
 def agency_dashboard(request):
-    return render(request,"agency_dashboard.html")
+    workers=WorkersDetails.objects.filter(agency__profile=request.user,approved_by_agency=True)
+    query=request.GET.get('query',None)
+    if query:
+        workers = workers.filter(profile__first_name__icontains=query)  
+    return render(request,"agency_dashboard.html",{'workers':workers})
 
 
 def worker(request):
@@ -391,8 +428,9 @@ def admin_booking(request):
  
  
  
-def admin_settings(request):
-    return render(request,"admin_settings.html")
+def user_details(request):
+    user_details = UserDetails.objects.all()
+    return render(request,"user_details.html",{'user_details': user_details})
 
 def reports(request):
     complaints = UserComplaints.objects.all()  # Fetch all complaints from the database
@@ -475,7 +513,7 @@ def agency_profile(request):
  
 
 def agency_workers(request):
-    workers=WorkersDetails.objects.all()
+    workers=WorkersDetails.objects.filter(agency__profile=request.user,approved_by_agency=False)
     print(workers)
     return render(request,"agency_workers.html",{'workers':workers})
  
@@ -490,6 +528,103 @@ def reject_worker(request,worker_id):
     worker=WorkersDetails.objects.get(id=worker_id)
     worker.delete()
     return redirect('agency_workers')
+
+
+
+
+def new_reg(request):
+    reg=WorkersDetails.objects.filter(agency__profile=request.user,approved_by_agency=True)
+    return render(request,"new_reg.html",{'users':reg})
+
+
+
+def user_complaint(request):
+    profiles = UserDetails.objects.all().values_list('profile', flat=True)
+    complaints = UserComplaints.objects.filter(user__in=profiles)
+    return render(request, "user_complaint.html", {'complaints': complaints})
+
+
+def worker_complaint(request):
+    profiles = WorkersDetails.objects.all().values_list('profile', flat=True)
+    complaints = UserComplaints.objects.filter(user__in=profiles)
+    return render(request,"worker_complaint.html" ,{'complaints': complaints} )
+   
+
+
+def worker_dash_com(request):
+
+    if request.method == "POST":
+        form = UserComplaintsForm(request.POST)
+        if form.is_valid():
+            complaint = form.save(commit=False)
+            complaint.user = request.user 
+            complaint.save()
+            messages.success(request, "Complaint added successfully!")
+            return redirect("worker_dash_com") 
+
+    else:
+        form = UserComplaintsForm()
+
+    return render(request, "worker_dash_com.html", { "form": form})
+
+
+
+
+from django.shortcuts import render
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Count
+from .models import BookWorker
+
+def worker_weekly_reports(request):
+    today = timezone.now().date()
+
+    start_of_week = today - timedelta(days=today.weekday()) 
+    end_of_week = start_of_week + timedelta(days=6) 
+    worker_bookings = (
+        BookWorker.objects.filter(worker__agency__profile=request.user,created_at__range=(start_of_week, end_of_week))
+        .values("worker__profile__email") 
+        .annotate(total_bookings=Count("id"))
+        .order_by("-total_bookings")
+    )
+
+    return render(request, "worker_weekly_reports.html", {"worker_bookings": worker_bookings})
+
+
+
+
+def worker_report(request):
+    bookings = BookWorker.objects.filter(worker__agency__profile=request.user)
+    return render(request,"worker_reports.html", {'bookings': bookings})
+
+
+
+    
+
+
+
+
+from django.db.models import Count
+
+
+def weekly_worker_reports(request):
+    today = timezone.now().date()
+
+    start_of_week = today - timedelta(days=today.weekday())  # Start from Monday
+    end_of_week = start_of_week + timedelta(days=6)  # End on Sunday
+
+    user_bookings = (
+        BookWorker.objects.filter(created_at__range=(start_of_week, end_of_week))
+        .values("user__email")  # Group by user email
+        .annotate(total_bookings=Count("id"))  # Count bookings per user
+        .order_by("-total_bookings")  # Sort by most bookings
+    )
+    booking = BookWorker.objects.filter(worker__profile=request.user)
+    print(booking   )
+    return render(request, "weekly_worker_reports.html", {"all_bookings": booking})
+
+
+
  
  
 

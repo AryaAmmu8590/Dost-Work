@@ -103,6 +103,7 @@
         ul li {
             margin-bottom: 10px;
             font-size: 16px;
+            list-style: none;
         }
     </style>
     <script>
@@ -110,46 +111,49 @@
             const details = document.getElementById('employee-details');
             details.style.display = details.style.display === 'none' ? 'block' : 'none';
         }
+
+        function workerComplaints() {
+            const worker_id = document.getElementById('worker-id').value;
+            const compButton = document.getElementById('comp');
+            // Dynamically update the worker profile URL
+            compButton.href = `{% url 'user_complaints' %}?id=${worker_id}`
+        }
     </script>
 </head>
 <body>
     <div class="container">
         <div class="left-section">
             <h2>Complaint Details</h2>
-            <form>
+            <form method="post" action="{% url 'user_complaints' %}">
+                {% csrf_token %}
                 <div class="form-field">
                     <label for="description">Description:</label>
-                    <textarea id="description" name="description" rows="4" placeholder="Enter complaint description..."></textarea>
+                    <textarea id="description" name="complaints" rows="4" placeholder="Enter complaint description..."></textarea>
                 </div>
+                <div class="form-field">
+                    <label for="worker-id">Worker ID:</label>
+                    <input {% if worker %} value="{{ worker.id_no }}" {% endif %} onchange="workerComplaints()" type="text" id="worker-id" name="worker_id" placeholder="Enter worker ID...">
+                </div>
+                
                 <div class="form-field">
                     <label for="category">Category:</label>
                     <input type="text" id="category" name="category" placeholder="Enter category...">
                 </div>
-                <div class="form-field">
-                    <label for="status">Status:</label>
-                    <input type="text" id="status" name="status" placeholder="Enter status...">
-                </div>
-                <div class="form-field">
-                    <label for="created-at">Created At:</label>
-                    <input type="date" id="created-at" name="created-at">
-                </div>
-                <div class="form-field">
-                    <label for="updated-at">Updated At:</label>
-                    <input type="date" id="updated-at" name="updated-at">
-                </div>
+        
                 <button type="submit" class="submit-button">Submit</button>
             </form>
         </div>
         <div class="right-section">
             <h2>Employee History</h2>
-            <button class="details-button" onclick="toggleEmployeeDetails()">Show Employee Details</button>
-            <div id="employee-details" class="employee-details">
+            <a id="comp" href="" class="details-button">
+                <button type="button">View Worker Profile</button>
+            </a>
+            <div  >
                 <ul>
-                    <li>Joined the company on: 2020-05-10</li>
-                    <li>Promoted to Team Lead on: 2022-03-15</li>
-                    <li>Awarded Employee of the Month: July 2023</li>
-                    <li>Completed 5 major projects</li>
-                    <li>Received certification in Advanced Project Management</li>
+                    <li>{{ worker.profile.first_name }}</li>
+                    <li>{{ worker }}</li>
+                    <li>{{ worker.agency }}</li>
+                 
                 </ul>
             </div>
         </div>

@@ -25,7 +25,7 @@ class AgencyDetailsForm(forms.ModelForm):
 class UserComplaintsForm(forms.ModelForm):
     class Meta:
         model = UserComplaints
-        fields =['description', 'category','status']
+        fields =['complaints','name','email']
     
 
 

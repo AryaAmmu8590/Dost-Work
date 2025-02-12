@@ -19,7 +19,8 @@
         <div class="features-grid">
             <div class="feature-card">
                 <i class="fas fa-user-friends feature-icon"></i>
-                <h3>Find Workers</h3>
+                <a href="/user_list_workers"><h3>Find Workers</h3></a>
+
                 <p>Organize your team and collaborate effectively.</p>
             </div>
             <div class="feature-card">
@@ -56,6 +57,14 @@
     <div class="footer">
         <p>&copy; 2025 Your Company. All rights reserved.</p>
     </div>
+
+   <!-- Notification Bell -->
+    <div class="notification-icon">
+    <a href="{% url 'admin_noty' %}">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge"></span>
+    </a>
+</div>
 </div>
 
 <style>
@@ -71,6 +80,7 @@
 
     .landing-container {
         padding: 0;
+        position: relative;
     }
 
     /* Hero Section */
@@ -222,6 +232,32 @@
         padding: 20px;
         background: #2c3e50;
         color: white;
+    }
+
+    /* Notification Icon */
+    .notification-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 24px;
+        color: black;
+        cursor: pointer;
+    }
+
+    .notification-icon:hover {
+        color: #074b94;  /* Optional: Change color on hover */
+    }
+
+    /* Notification Badge */
+    .notification-badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: red;
+        color: white;
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 50%;
     }
 </style>
 {% endblock %}

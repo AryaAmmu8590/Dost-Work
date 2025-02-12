@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <style>
+        /* General Page Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f3f4f6;
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            color: #0078d7;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        /* Table Styling */
+        .table-container {
+            overflow-x: auto;
+            margin: auto;
+            max-width: 900px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #0078d7;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #e6f7ff;
+            transition: 0.3s ease;
+        }
+
+        /* Button Styling */
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+            transition: 0.3s ease;
+        }
+
+        .approve {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .approve:hover {
+            background-color: #218838;
+        }
+
+        .reject {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .reject:hover {
+            background-color: #c82333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .table-container {
+                width: 100%;
+                padding: 15px;
+            }
+            table {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h2>User Details</h2>
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>Address</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.profile.first_name }}</td>
+                <td>{{ user.profile.email }}</td>
+                <td>{{ user.age }}</td>
+                <td>{{ user.address }}</td>
+             
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</body>
+</html>

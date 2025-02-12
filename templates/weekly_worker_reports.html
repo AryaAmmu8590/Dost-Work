@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Bookings Report</title>
+    <style>
+        /* Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #ecf0f1;
+            transition: 0.3s;
+        }
+
+        .no-data {
+            color: #e74c3c;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            table {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>📊 All Bookings Report</h2>
+        
+        {% if all_bookings %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Worker Email</th>
+                        <th>User Email</th>
+                        <th>Booking Time</th>
+                        <th>Created At</th>
+                        <th>Place</th>
+                        <th>Additional Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in all_bookings %}
+                        <tr>
+                            <td>{{ booking.worker.profile.first_name }}</td>
+                            <td>{{ booking.user.first_name }}</td>
+                            <td>{{ booking.time }}</td>
+                            <td>{{ booking.created_at }}</td>
+                            <td>{{ booking.place }}</td>
+                            <td>{{ booking.additionalnotes|default:"None" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-data">No bookings found.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

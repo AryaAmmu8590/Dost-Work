@@ -39,6 +39,9 @@ class Profile(AbstractUser):
     role = models.CharField(max_length=15,choices=RoleChoices.choices)
     email=models.EmailField(unique=True)
     phone=models.CharField(max_length=15, blank=True, null=True)
+    age=models.IntegerField(blank=True, null=True)
+    worker_approved=models.BooleanField(blank=True, null=True)
+    
 
     groups = models.ManyToManyField( 
         Group,
@@ -116,6 +119,7 @@ class BookWorker(models.Model):
     worker = models.ForeignKey('WorkersDetails', on_delete=models.CASCADE, related_name='worker_booking')
     user = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='user_booking')
     time = models.CharField(default=0, max_length=150)
+    created_at=models.DateField(auto_now_add=True)
     place = models.TextField(blank=True, null=True)
     additionalnotes = models.CharField(max_length=140,null=True,blank=True)
 
@@ -136,12 +140,25 @@ class UserComplaints(models.Model):
         ("Closed", "Closed"),
     ]
 
-    user = models.ForeignKey( 'UserDetails',on_delete=models.CASCADE)
-    description = models.TextField()
-    category = models.CharField(max_length=255)
+    user = models.ForeignKey( Profile,on_delete=models.CASCADE,null=True, blank=True)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="Open")
     created_at = models.DateTimeField(default=now, editable=False)
+    name=models.CharField(max_length=255,null=True,blank=True)
+    email=models.EmailField(null=True,blank=True)
     updated_at = models.DateTimeField(default=now)
+    complaints=models.CharField(max_length=225,null=True,blank=True)
+    
+    
+    
+class Notification(models.Model):
+    recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='notifications')
+    sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='sent_notifications', null=True, blank=True)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'Notification for {self.recipient.email} - Read: {self.read}'
 
    
 

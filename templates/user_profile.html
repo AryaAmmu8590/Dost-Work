@@ -72,8 +72,10 @@
 <script>
     // Toggle between view and edit modes
     document.getElementById('editProfileBtn').addEventListener('click', function() {
+        // Enable editing mode for all input fields and textareas
         document.querySelectorAll('input, textarea').forEach(function(el) {
             el.removeAttribute('readonly');
+            el.removeAttribute('disabled'); // Remove 'disabled' from radio buttons to allow editing
         });
 
         // Show Save Changes button and hide Edit Profile button
@@ -194,4 +196,5 @@
         box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
     }
 </style>
+
 {% endblock %}

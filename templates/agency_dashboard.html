@@ -34,6 +34,7 @@
             display: flex;
             flex-direction: column;
             transition: width 0.3s ease;
+            position: relative; /* Added for positioning the dropdown */
         }
 
         .sidebar-header {
@@ -80,6 +81,35 @@
             font-size: 1.2rem;
         }
 
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #34495e;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            padding: 10px 20px;
+            color: #fff;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #2980b9;
+        }
+
         /* Main Content Styles */
         .main-content {
             flex-grow: 1;
@@ -92,6 +122,9 @@
 
         .main-header {
             margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .main-header h1 {
@@ -100,11 +133,100 @@
             color: #2c3e50;
         }
 
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #f4f7f6;
+            border-radius: 5px;
+            padding: 5px;
+            width: 250px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar input {
+            border: none;
+            background: none;
+            outline: none;
+            padding: 5px 10px;
+            width: 100%;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .search-bar button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+
+        .search-bar button:hover {
+            background-color: #2980b9;
+        }
+
         .content {
             background-color: #f9f9f9;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Worker Cards Styles */
+        .worker-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .worker-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .worker-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .worker-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .worker-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .worker-card p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .worker-card button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .worker-card button:hover {
+            background-color: #2980b9;
         }
 
         /* Responsive Design */
@@ -132,6 +254,14 @@
             .main-content {
                 margin-left: 10px;
             }
+
+            .search-bar {
+                width: 200px;
+            }
+
+            .worker-cards {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
         }
     </style>
 </head>
@@ -145,8 +275,21 @@
             <ul class="sidebar-menu">
                 <li><a href="{% url 'agency_dashboard' %}" class="active"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
                 <li><a href="{% url 'agency_profile' %}"><i class="fas fa-user"></i>Profile</a></li>
-                <li><a href="{% url 'agency_workers' %}"><i class="fas fa-users"></i>Workers</a></li>
-                <li><a href="{% url 'complaints_replay' %}"><i class="fas fa-comments"></i>Complaints & Replay</a></li>
+                <li><a href="{% url 'agency_workers' %}"><i class="fas fa-users"></i>New Registrations</a></li>
+                <li><a href="{% url 'new_reg' %}"><i class="fas fa-users"></i>Workers</a></li>
+                <li><a href="{% url 'worker_reports' %}"><i class="fas fa-users"></i>Worker Report</a></li>
+                <li><a href="{% url 'worker_weekly_reports' %}"><i class="fas fa-users"></i>Weekly Reports</a></li>
+
+
+                <!-- Dropdown Menu for Complaints & Replay -->
+                <li class="dropdown">
+                    <a href="#"><i class="fas fa-comments"></i>Complaints & Replay <i class="fas fa-caret-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="{% url 'user_complaint' %}">User Complaints</a>
+                        <a href="{% url 'worker_complaint' %}">Worker Complaints</a>
+                    </div>
+                </li>
+
                 <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
             </ul>
         </div>
@@ -155,14 +298,42 @@
         <div class="main-content">
             <div class="main-header">
                 <h1>Welcome to the Dashboard</h1>
+                <!-- Search Bar -->
+                <form action="{% url 'agency_dashboard' %}">
+
+                <div class="search-bar">
+                    <input type="text" name="query" placeholder="Search..." id="search">
+                    <button type="submit">Search</button>
+                </div>
+            </form>
+
             </div>
             <div class="content">
-                <p>This is where your main content will go.</p>
+                <h2>Workers</h2>
+                <div class="worker-cards">
+                    <!-- Worker Card 1 -->
+                     {% for item in workers %}
+                    <div class="worker-card">
+                        <h3>{{item.profile.first_name}} {{item.profile.last_name}}</h3>
+                        <p>{{item.profile.email}}</p>
+                    </div>
+                    {% endfor %}
+                 
+                
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Font Awesome for Icons -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    <script>
+        function search() {
+            let query = document.getElementById("search").value;
+            alert("Searching for: " + query);
+            // Here, you can implement actual search functionality, like making an API call or redirecting to a search results page.
+        }
+    </script>
 </body>
 </html>

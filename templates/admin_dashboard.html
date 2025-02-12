@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard with Sidebar</title>
     <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -58,40 +59,11 @@
             background-color: #0c498a;
         }
 
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            z-index: 1;
-            border-radius: 5px;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            border-radius: 5px;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #ddd;
-        }
-
         .main-content {
             margin-left: 250px;
             padding: 20px;
             width: 100%;
+            position: relative;
         }
 
         .main-content h1 {
@@ -104,13 +76,30 @@
             color: #333;
         }
 
-        /* Icon styling */
-        .sidebar ul li a i {
-            margin-right: 10px;
+        /* Notification Icon */
+        .notification-icon {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 24px;
+            color: black;  /* Changed to black */
+            cursor: pointer;
         }
 
-        .dropdown-content a i {
-            margin-right: 8px;
+        .notification-icon:hover {
+            color: #074b94;  /* Optional: Change color on hover */
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: 12px;
+            right: 35px;
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 50%;
         }
 
     </style>
@@ -127,7 +116,7 @@
                 <li class="dropdown">
                     <a href="javascript:void(0)"><i class="fas fa-users"></i> Users</a>
                     <div class="dropdown-content">
-                        <a href="{% url 'admin_settings' %}"><i class="fas fa-user-cog"></i> Manage Users</a>
+                        <a href="{% url 'user_details' %}"><i class="fas fa-user-cog"></i> Manage Users</a>
                         <a href="{% url 'agency_details' %}"><i class="fas fa-building"></i> Manage Agency</a>
                         <a href="{% url 'workers_details' %}"><i class="fas fa-user-tie"></i> Manage Workers</a>
                     </div>
@@ -142,13 +131,16 @@
 
         <!-- Main Content -->
         <div class="main-content">
+            <!-- Notification Bell -->
+            <div class="notification-icon">
+                <i class="fas fa-bell"></i>
+                <a href="{% url 'admin_noty' %}"<span class="notification-badge">3</span></a>
+            </div>
+
             <h1>Welcome to the Dashboard</h1>
             <p>This is where your main content will go. You can view and manage all the details and settings for the platform here.</p>
         </div>
     </div>
 
-    <script>
-        // Optional: JavaScript to toggle the sidebar (for mobile view, etc.)
-    </script>
 </body>
 </html>
