@@ -52,14 +52,19 @@
                 <th>Time</th>
                 <th>Place</th>
                 <th>Additional Notes</th>
+                <th>Email</th>
             </tr>
         </thead>
         <tbody>
             {% for worker in booking %}
             <tr>
+                <td>{{ worker.user.first_name }}</td>
+                <td>{{ worker.profile.username }}</td>
                 <td>{{ worker.time }}</td>
-                <td>{{ worker.place }}</td>
-                <td>{{ worker.additional_notes }}</td>
+                <td>{{ worker.place}}</td>
+                <td>{{ worker.user.additional_notes }}</td>
+                <td>{{ worker.user.email }}</td>
+
             </tr>
             {% endfor %}
         </tbody>
