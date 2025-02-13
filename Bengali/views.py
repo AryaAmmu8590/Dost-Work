@@ -87,6 +87,9 @@ def workers_details(request):
 
 def user_list_workers(request):
     workers=WorkersDetails.objects.all()
+    query=request.GET.get('query')
+    if query and query != '':
+        workers=workers.filter(profile__first_name__icontains=query)
     return render(request,"user_list_workers.html",{'workers':workers})
 
 
