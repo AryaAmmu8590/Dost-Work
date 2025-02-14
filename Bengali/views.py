@@ -86,12 +86,19 @@ def workers_details(request):
 
 
 
+from django.shortcuts import render
+from .models import WorkersDetails
+
 def user_list_workers(request):
-    workers=WorkersDetails.objects.all()
-    query=request.GET.get('query')
+    workers = WorkersDetails.objects.all() 
+    query = request.GET.get('query')  
+
     if query and query != '':
-        workers=workers.filter(profile__first_name__icontains=query)
-    return render(request,"user_list_workers.html",{'workers':workers})
+        workers = workers.filter(
+            models.Q(profile__first_name__icontains=query) | models.Q(category__icontains=query)
+        )
+    
+    return render(request, "user_list_workers.html", {'workers': workers})
 
 
 def user_profile(request):
@@ -245,7 +252,8 @@ def user_registration(request):
             user_details.save()
 
             messages.success(request, 'User registered successfully!')
-            return redirect('login')
+            request.session['user_id'] = user.id
+            return redirect('payment')
         else:
             user.delete()
             print(user_details_form.errors ,user_details_form.errors)
@@ -284,7 +292,9 @@ def worker_registration(request):
             worker_details.save()
 
             messages.success(request, 'Worker registered successfully!')
-            return redirect('login')
+            request.session['user_id'] = worker.id
+            return redirect('payment')
+
         else:
             print(worker_details_form.errors ,worker_details_form.errors)
 
@@ -320,7 +330,8 @@ def agency_registration(request):
             agency_details.save()
 
             messages.success(request, 'Agency registered successfully!')
-            return redirect('login')
+            request.session['user_id'] = agency.id
+            return redirect('payment')
         else:
             print(agency_details_form.errors ,agency_details_form.errors)
 
@@ -602,6 +613,10 @@ def worker_report(request):
     return render(request,"worker_reports.html", {'bookings': bookings})
 
 
+def email(request):
+    return render(request,"email.html")
+
+
 
     
 
@@ -631,23 +646,79 @@ def weekly_worker_reports(request):
 
 
 
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import UserComplaintReply ,UserComplaints
+from .form import ReplyForm
 
-def agency_user_replay(request):
-   
-    return render(request,"agency_user_replay.html"  )
+def agency_user_replay(request, complaint_id):  
+    complaint = get_object_or_404(UserComplaints, id=complaint_id)  
+    form = ReplyForm(data=request.POST or None)
+    if form.is_valid():
+        replay = form.save(commit=False)
+        replay.complaint = complaint
+        replay.save()
+        return redirect('user_complaints')
+    else:
+        print(form.errors)
+    return render(request, "agency_user_replay.html", {"complaint": complaint})  
+
 
 
 def agency_worker_replay(request):
-   
     return render(request,"agency_worker_replay.html"  )
    
+   
+   
+   
+   
+def admin_user_report(request):
+    complaints = UserComplaints.objects.all()
+    return render(request, "admin_user_report.html", {'complaints': complaints})
+
+
+
+def admin_worker_report(request):
+    complaints = UserComplaints.objects.all()
+    return render(request, "admin_worker_report.html", {'complaints': complaints})
+
+
+from django.shortcuts import render, redirect
+from .models import Payment
+from .form import PaymentForm
+
+# Payment view to handle payment submission
+def payment(request):
+    if request.method == 'POST':
+        user = get_object_or_404(Profile, id=request.session.get('user_id'))   
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            obj=form.save(commit=False)
+            obj.user=user
+            obj.save() 
+            return redirect('success') 
+        else:
+            print(form.errors)
+            user.delete()
+            
+    else:
+        form = PaymentForm()
+
+    return render(request, 'payment.html', {'form': form})
 
 
 
 
+def success(request):
+    return render(request, "success.html")
 
 
- 
+
+def admin_pay(request):
+    payments=Payment.objects.all()
+    return render(request, "admin_pay.html",{'payments':payments})
+
+
+
  
 
 
