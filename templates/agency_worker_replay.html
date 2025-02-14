@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reply to Complaint</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .reply-section {
+            margin-bottom: 20px;
+        }
+        .reply-section h3 {
+            color: #0078d7;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #45a049;
+        }
+        .reply-container {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Reply to Complaint</h1>
+
+        <!-- Reply Form -->
+        <div class="reply-section">
+            <h3>Provide Your Reply</h3>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="reply">Reply:</label>
+                    <textarea id="reply" name="reply" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Submit Reply</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Display Reply (if any) -->
+        {% if complaint.reply %}
+        <div class="reply-container">
+            <h3>Agency Reply:</h3>
+            <p>{{ complaint.reply }}</p>
+        </div>
+       {% else %}
+       
+        {% endif %} 
+    </div>
+</body>
+</html>

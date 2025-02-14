@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <style>
+        body {
+            margin: 40px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            margin: 40px auto;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .payment-details {
+            margin: 20px 0;
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        .amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-field {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-field label {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-field input,
+        .form-field select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus {
+            border-color: #4facfe;
+            outline: none;
+        }
+
+        .button {
+            display: inline-block;
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            color: #fff;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            text-decoration: none; /* Remove default link underline */
+        }
+
+        .button:hover {
+            background: linear-gradient(135deg, #00f2fe, #4facfe);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        a {
+            color: #4facfe;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="title">Payment Details</h1>
+    <p class="payment-details">Complete your payment below:</p>
+
+    <!-- Hidden Amount Field -->
+
+    <div class="amount">Total Amount: $100.00</div>
+
+    <form method="POST" action="{% url 'payment' %}" id="payment-form">
+        {% csrf_token %}
+        <input type="hidden" name="amount" value="100.00">
+
+        <div class="form-field">
+            <label for="payment-method">Select Payment Method</label>
+            <select id="payment-method" name="payment_method" required>
+                <option value="" disabled selected>Select a payment method</option>
+                <option value="credit_card">Credit Card</option>
+                <option value="paypal">PayPal</option>
+                <option value="bank_transfer">Bank Transfer</option>
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="card-number">Card Number (if applicable)</label>
+            <input type="text" id="card-number" name="card_number" placeholder="Enter your card number">
+        </div>
+
+        <button type="submit" class="button">Pay Now</button>
+    </form>        
+</div>
+
+</body>
+</html>

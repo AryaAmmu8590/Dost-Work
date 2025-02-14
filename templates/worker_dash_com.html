@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complaint Form</title>
+    <title>Complaint Form</title> 
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -51,6 +51,15 @@
         }
         .form-group {
             margin-bottom: 20px;
+            position: relative;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
         }
         .button {
             display: block;
@@ -70,34 +79,34 @@
         .button:active {
             background-color: #388e3c;
         }
-        .form-group input, .form-group textarea {
-            font-size: 0.95em;
-        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>Submit Your Complaint</h1>
-        <form action="{% url 'worker_dash_com' %}" method="POST">
+        <form id="complaintForm" action="{% url 'worker_dash_com' %}" method="POST">
             {% csrf_token %}
             
             <!-- Name Field -->
             <div class="form-group">
                 <label for="name"> Name:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name">
+                <span class="error-message" id="name-error">Name must be at least 3 characters</span>
             </div>
 
             <!-- Email Field -->
             <div class="form-group">
                 <label for="email"> Email:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email">
+                <span class="error-message" id="email-error">Enter a valid email</span>
             </div>
 
             <!-- Complaint Field -->
             <div class="form-group">
                 <label for="complaint">Your Complaint:</label>
-                <textarea id="complaint" name="complaint" required></textarea>
+                <textarea id="complaint" name="complaint"></textarea>
+                <span class="error-message" id="complaint-error">Complaint must be at least 10 characters</span>
             </div>
 
             <!-- Submit Button -->
@@ -105,5 +114,57 @@
         </form>
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const nameInput = document.getElementById("name");
+            const emailInput = document.getElementById("email");
+            const complaintInput = document.getElementById("complaint");
+
+            const nameError = document.getElementById("name-error");
+            const emailError = document.getElementById("email-error");
+            const complaintError = document.getElementById("complaint-error");
+
+            function validateName() {
+                if (nameInput.value.trim().length < 3) {
+                    nameError.style.display = "block";
+                    return false;
+                } else {
+                    nameError.style.display = "none";
+                    return true;
+                }
+            }
+
+            function validateEmail() {
+                const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+                if (!emailInput.value.match(emailPattern)) {
+                    emailError.style.display = "block";
+                    return false;
+                } else {
+                    emailError.style.display = "none";
+                    return true;
+                }
+            }
+
+            function validateComplaint() {
+                if (complaintInput.value.trim().length < 10) {
+                    complaintError.style.display = "block";
+                    return false;
+                } else {
+                    complaintError.style.display = "none";
+                    return true;
+                }
+            }
+
+            nameInput.addEventListener("input", validateName);
+            emailInput.addEventListener("input", validateEmail);
+            complaintInput.addEventListener("input", validateComplaint);
+
+            document.getElementById("complaintForm").addEventListener("submit", function(event) {
+                if (!validateName() || !validateEmail() || !validateComplaint()) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

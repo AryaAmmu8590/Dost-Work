@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f2f7fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 2.5rem;
+            color: #4A90E2;
+        }
+
+        /* Container for the table */
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 1rem;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        td {
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover td {
+            background-color: #f1f1f1;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        /* Form styling */
+        form {
+            margin: 0 auto;
+            width: 80%;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #4facfe;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            padding: 12px 25px;
+            font-size: 1rem;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* Responsive layout */
+        @media screen and (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            form {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>User Details</h1>
+
+    <!-- Container for the table -->
+    <div class="container">
+        <!-- Display the table -->
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Amount</th>
+            </tr>
+            {% for detail in payments %}
+            <tr>
+                <td>{{ detail.user.first_name }}</td>
+                <td>{{ detail.user.role }}</td>
+                <td>{{ detail.amount }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="no-data">No data available</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</body>
+</html>

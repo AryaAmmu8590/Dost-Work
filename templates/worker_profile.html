@@ -1,72 +1,161 @@
-
+<!DOCTYPE html>
 {% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .profile-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .profile-card {
+            width: 100%;
+            max-width: 800px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .profile-header {
+            background-color: #1e3a8a;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .section-title {
+            color: #1e3a8a;
+            margin-bottom: 15px;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            color: #1e3a8a;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        /* Error Styling */
+        .error {
+            border: 2px solid red !important;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        /* Buttons */
+        .btn-edit {
+            background-color: #f59e0b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-edit:hover {
+            background-color: #d97706;
+        }
+        .btn-save {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+        .btn-save:hover {
+            background-color: #059669;
+        }
+    </style>
+</head>
+<body>
 
-{% block content %}
 <div class="profile-container">
     <div class="profile-card">
         <div class="profile-header">
             <h3>Your Profile</h3>
         </div>
         <div class="profile-body">
-            <form method="post" action="{% url 'user_profile' %}">
+            <form method="post" action="{% url 'user_profile' %}" id="profileForm">
                 {% csrf_token %}
-                
-                <!-- Profile Details (View Mode) -->
+
                 <h4 class="section-title">Profile Details</h4>
+                
+                <!-- Email -->
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" readonly>
+                    <span class="error-message" id="emailError">Invalid email format</span>
                 </div>
+
+                <!-- First Name -->
                 <div class="form-group">
                     <label for="first_name">First Name</label>
                     <input type="text" id="first_name" name="first_name" class="form-control" value="{{ user.first_name }}" readonly>
+                    <span class="error-message" id="firstNameError">First name is required</span>
                 </div>
+
+                <!-- Last Name -->
                 <div class="form-group">
                     <label for="last_name">Last Name</label>
                     <input type="text" id="last_name" name="last_name" class="form-control" value="{{ user.last_name }}" readonly>
+                    <span class="error-message" id="lastNameError">Last name is required</span>
                 </div>
+
+                <!-- Phone -->
                 <div class="form-group">
                     <label for="phone">Phone</label>
                     <input type="text" id="phone" name="phone" class="form-control" value="{{ user.phone }}" readonly>
+                    <span class="error-message" id="phoneError">Invalid phone number</span>
                 </div>
-                <!-- <div class="form-group">
-                    <label for="role">Role</label>
-                    <input type="text" id="role" name="role" class="form-control" value="{{ user.get_role_display }}" readonly>
-                </div> -->
 
-                <!-- User Details (View Mode) -->
+                <!-- Address -->
                 <h4 class="section-title">Additional Details</h4>
                 <div class="form-group">
                     <label for="address">Address</label>
                     <textarea id="address" name="address" class="form-control" rows="3" readonly>{{ userdetails.address }}</textarea>
+                    <span class="error-message" id="addressError">Address is required</span>
                 </div>
+
+                <!-- Age -->
                 <div class="form-group">
                     <label for="age">Age</label>
                     <input type="number" id="age" name="age" class="form-control" value="{{ userdetails.age }}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="sex">Gender</label>
-                    <div style="display: flex; gap: 15px;">
-                        <label>
-                            <input type="radio" name="sex" value="Male" {% if userdetails.sex == 'male' %}checked{% endif %} disabled> Male
-                        </label>
-                        <label>
-                            <input type="radio" name="sex" value="Female" {% if userdetails.sex == 'female' %}checked{% endif %} disabled> Female
-                        </label>
-                        <label>
-                            <input type="radio" name="sex" value="Other" {% if userdetails.sex == 'other' %}checked{% endif %} disabled> Other
-                        </label>
-                    </div>
+                    <span class="error-message" id="ageError">Age must be between 18-100</span>
                 </div>
 
                 <!-- Edit Profile Button -->
                 <div class="text-center">
-                    <button type="button" class="btn btn-edit" id="editProfileBtn">Edit Profile</button>
+                    <button type="button" class="btn-edit" id="editProfileBtn">Edit Profile</button>
                 </div>
 
-                <!-- Save Changes Button (Initially hidden) -->
+                <!-- Save Changes Button -->
                 <div class="text-center">
-                    <button type="submit" class="btn btn-save" id="saveChangesBtn" style="display:none;">Save Changes</button>
+                    <button type="submit" class="btn-save" id="saveChangesBtn">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -74,103 +163,41 @@
 </div>
 
 <script>
-    // Toggle between view and edit modes
     document.getElementById('editProfileBtn').addEventListener('click', function() {
         document.querySelectorAll('input, textarea').forEach(function(el) {
             el.removeAttribute('readonly');
         });
 
-        // Show Save Changes button and hide Edit Profile button
         document.getElementById('saveChangesBtn').style.display = 'inline-block';
         document.getElementById('editProfileBtn').style.display = 'none';
     });
+
+    document.getElementById('profileForm').addEventListener('submit', function(event) {
+        let valid = true;
+
+        function validateField(id, condition, errorId) {
+            let input = document.getElementById(id);
+            let errorMessage = document.getElementById(errorId);
+            if (condition) {
+                input.classList.add("error");
+                errorMessage.style.display = "block";
+                valid = false;
+            } else {
+                input.classList.remove("error");
+                errorMessage.style.display = "none";
+            }
+        }
+
+        validateField("email", !document.getElementById("email").value.includes("@"), "emailError");
+        validateField("first_name", document.getElementById("first_name").value.trim() === "", "firstNameError");
+        validateField("last_name", document.getElementById("last_name").value.trim() === "", "lastNameError");
+        validateField("phone", !/^\d{10}$/.test(document.getElementById("phone").value), "phoneError");
+        validateField("address", document.getElementById("address").value.trim() === "", "addressError");
+        validateField("age", document.getElementById("age").value < 18 || document.getElementById("age").value > 100, "ageError");
+
+        if (!valid) event.preventDefault();
+    });
 </script>
 
-<style>
-    /* Profile Container */
-    .profile-container {
-        display: flex;
-        justify-content: center;
-        padding: 20px;
-    }
-
-    /* Profile Card */
-    .profile-card {
-        width: 100%;
-        max-width: 800px;
-        background-color: #fff;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-    }
-
-    /* Header */
-    .profile-header {
-        background-color: #1e3a8a; /* Dark Blue */
-        color: white;
-        padding: 10px 20px;
-        border-radius: 10px;
-        text-align: center;
-    }
-
-    .profile-header h3 {
-        margin: 0;
-    }
-
-    /* Section Title */
-    .section-title {
-        color: #1e3a8a;
-        margin-bottom: 15px;
-        font-size: 1.25rem;
-        font-weight: bold;
-    }
-
-    /* Form Group */
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        color: #1e3a8a;
-        font-weight: bold;
-    }
-
-    .form-group input, .form-group textarea, .form-group select {
-        width: 100%;
-        padding: 10px;
-        font-size: 1rem;
-        border-radius: 10px;
-        border: 1px solid #ddd;
-    }
-
-    /* Button Styling */
-    .btn-edit {
-        background-color: #f59e0b;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        font-size: 1rem;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .btn-edit:hover {
-        background-color: #d97706;
-    }
-
-    .btn-save {
-        background-color: #10b981;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        font-size: 1rem;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .btn-save:hover {
-        background-color: #059669;
-    }
-</style>
-
-{% endblock %}
+</body>
+</html>

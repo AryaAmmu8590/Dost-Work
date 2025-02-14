@@ -83,27 +83,28 @@
 
     <main>
         <section id="complaints">
-            <h2>Manage User Complaints</h2>
+            <h2>View  Complaints</h2>
             <table>
                 <thead>
                     <tr>
                         <th>User</th>
-                        <th>Description</th>
-                        <th>Category</th>
+                       
                         <th>Status</th>
+                        <th>Complaints</th>
+
                         <th>Created At</th>
-                        <th>Updated At</th>
+                       
                     </tr>
                 </thead>
                 <tbody>
                     {% for complaint in complaints %}
                     <tr>
                         <td>{{ complaint.user }}</td>
-                        <td>{{ complaint.description }}</td>
-                        <td>{{ complaint.category }}</td>
+                       
                         <td>{{ complaint.status }}</td>
+                        <td>{{ complaint.complaints }}</td>
                         <td>{{ complaint.created_at }}</td>
-                        <td>{{ complaint.updated_at }}</td>
+                       
                     </tr>
                     {% empty %}
                     <tr>

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -47,59 +48,72 @@
         .form-group input[type="submit"]:hover {
             background-color: #45a049;
         }
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="form-container">
         <h2>Edit Agency Profile</h2>
-        <form action="{% url 'agency_profile' %}" method="post" enctype="multipart/form-data">
+        <form id="agencyProfileForm" action="{% url 'agency_profile' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <!-- Agency Name -->
             <div class="form-group">
                 <label for="agency-name">Agency Name:</label>
-                <input type="text" id="agency-name" value="{{ user.agency_profile.agency_name }}"  name="agency_name" placeholder="Enter agency name" required>
+                <input type="text" id="agency-name" value="{{ user.agency_profile.agency_name }}" name="agency_name" placeholder="Enter agency name" required>
+                <div id="agencyNameError" class="error-message"></div>
             </div>
 
             <!-- License ID -->
             <div class="form-group">
                 <label for="licence-id">License ID:</label>
                 <input type="text" value="{{ user.agency_profile.licence_id }}" id="licence-id" name="licence_id" placeholder="Enter license ID">
+                <div id="licenceIdError" class="error-message"></div>
             </div>
 
             <!-- Address -->
             <div class="form-group">
                 <label for="address">Address:</label>
                 <input type="text" id="address" name="address" value="{{ user.agency_profile.address }}" placeholder="Enter agency address">
+                <div id="addressError" class="error-message"></div>
             </div>
 
             <!-- Username -->
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="username" value="{{ user.username }}"  placeholder="Enter username" required>
+                <input type="text" id="username" name="username" value="{{ user.username }}" placeholder="Enter username" required>
+                <div id="usernameError" class="error-message"></div>
             </div>
 
             <!-- First Name -->
             <div class="form-group">
                 <label for="first-name">First Name:</label>
-                <input type="text" id="first-name" value="{{ user.first_name }}"  name="first_name" placeholder="Enter first name" required>
+                <input type="text" id="first-name" value="{{ user.first_name }}" name="first_name" placeholder="Enter first name" required>
+                <div id="firstNameError" class="error-message"></div>
             </div>
 
             <!-- Last Name -->
             <div class="form-group">
                 <label for="last-name">Last Name:</label>
-                <input type="text" id="last-name" value="{{ user.last_name }}"  name="last_name" placeholder="Enter last name" required>
+                <input type="text" id="last-name" value="{{ user.last_name }}" name="last_name" placeholder="Enter last name" required>
+                <div id="lastNameError" class="error-message"></div>
             </div>
 
             <!-- Phone -->
             <div class="form-group">
                 <label for="phone">Phone:</label>
-                <input type="tel" id="phone" value="{{ user.phone }}"  name="phone" placeholder="Enter phone number" required>
+                <input type="tel" id="phone" value="{{ user.phone }}" name="phone" placeholder="Enter phone number" required>
+                <div id="phoneError" class="error-message"></div>
             </div>
 
             <!-- Email -->
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" value="{{ user.email }}" id="email" name="email" placeholder="Enter email" required>
+                <div id="emailError" class="error-message"></div>
             </div>
 
             <!-- Submit Button -->
@@ -108,5 +122,70 @@
             </div>
         </form>
     </div>
+
+    <script>
+        // Validation function
+        function validateField(field, regex, errorMessage) {
+            const input = document.getElementById(field);
+            const errorDiv = document.getElementById(field + 'Error');
+            if (!regex.test(input.value)) {
+                errorDiv.textContent = errorMessage;
+                return false;
+            } else {
+                errorDiv.textContent = '';
+                return true;
+            }
+        }
+
+        // Add event listeners for real-time validation
+        document.getElementById('agency-name').addEventListener('input', function() {
+            validateField('agency-name', /^[A-Za-z0-9\s]+$/, 'Agency name can only contain letters, numbers, and spaces.');
+        });
+
+        document.getElementById('licence-id').addEventListener('input', function() {
+            validateField('licence-id', /^[A-Za-z0-9\-]+$/, 'License ID can only contain letters, numbers, and dashes.');
+        });
+
+        document.getElementById('address').addEventListener('input', function() {
+            validateField('address', /^.{1,}$/, 'Address cannot be empty.');
+        });
+
+        document.getElementById('username').addEventListener('input', function() {
+            validateField('username', /^[A-Za-z0-9_]+$/, 'Username can only contain letters, numbers, and underscores.');
+        });
+
+        document.getElementById('first-name').addEventListener('input', function() {
+            validateField('first-name', /^[A-Za-z]+$/, 'First name can only contain letters.');
+        });
+
+        document.getElementById('last-name').addEventListener('input', function() {
+            validateField('last-name', /^[A-Za-z]+$/, 'Last name can only contain letters.');
+        });
+
+        document.getElementById('phone').addEventListener('input', function() {
+            validateField('phone', /^\d{10}$/, 'Phone number must be exactly 10 digits.');
+        });
+
+        document.getElementById('email').addEventListener('input', function() {
+            validateField('email', /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Please enter a valid email address.');
+        });
+
+        // Form submit validation
+        document.getElementById('agencyProfileForm').addEventListener('submit', function(event) {
+            let valid = true;
+            // Check all fields before submitting
+            const fields = ['agency-name', 'licence-id', 'address', 'username', 'first-name', 'last-name', 'phone', 'email'];
+            fields.forEach(function(field) {
+                if (!validateField(field, document.getElementById(field).pattern, '')) {
+                    valid = false;
+                }
+            });
+
+            if (!valid) {
+                event.preventDefault();
+                alert('Please fix the errors before submitting.');
+            }
+        });
+    </script>
 </body>
 </html>

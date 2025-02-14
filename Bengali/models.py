@@ -160,6 +160,40 @@ class Notification(models.Model):
 
     def __str__(self):
         return f'Notification for {self.recipient.email} - Read: {self.read}'
+    
+    
+    
+
+from django.db import models
+
+class Payment(models.Model):
+    PAYMENT_METHODS = [
+        ('credit_card', 'Credit Card'),
+        ('paypal', 'PayPal'),
+        ('bank_transfer', 'Bank Transfer'),
+    ]
+
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='payments',null=True,blank=True)
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHODS)
+    card_number = models.CharField(max_length=16, blank=True, null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Payment of ${self.amount} via {self.get_payment_method_display()}"
+    
+    
+    
+    
+    
+class UserComplaintReply(models.Model):
+    complaint = models.ForeignKey(UserComplaints, on_delete=models.CASCADE, related_name="replies",null=True,blank=True)
+    replied_by = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True, related_name="replies")
+    message = models.TextField()
+    created_at = models.DateTimeField(default=now, editable=False)
+
+    def __str__(self):
+        return f"Reply to Complaint #{self.complaint.id} by {self.replied_by}"
 
    
 

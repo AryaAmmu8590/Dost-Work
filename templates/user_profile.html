@@ -8,7 +8,7 @@
             <h3>Your Profile</h3>
         </div>
         <div class="profile-body">
-            <form method="post" action="{% url 'user_profile' %}">
+            <form method="post" action="{% url 'user_profile' %}" id="profileForm">
                 {% csrf_token %}
 
                 <!-- Profile Details (View Mode) -->
@@ -16,18 +16,22 @@
                 <div class="form-group">
                     <label for="email"><i class="fas fa-envelope"></i> Email</label>
                     <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" readonly>
+                    <div id="emailError" class="error-message"></div>
                 </div>
                 <div class="form-group">
                     <label for="first_name"><i class="fas fa-user"></i> First Name</label>
                     <input type="text" id="first_name" name="first_name" class="form-control" value="{{ user.first_name }}" readonly>
+                    <div id="firstNameError" class="error-message"></div>
                 </div>
                 <div class="form-group">
                     <label for="last_name"><i class="fas fa-user"></i> Last Name</label>
                     <input type="text" id="last_name" name="last_name" class="form-control" value="{{ user.last_name }}" readonly>
+                    <div id="lastNameError" class="error-message"></div>
                 </div>
                 <div class="form-group">
                     <label for="phone"><i class="fas fa-phone"></i> Phone</label>
                     <input type="text" id="phone" name="phone" class="form-control" value="{{ user.phone }}" readonly>
+                    <div id="phoneError" class="error-message"></div>
                 </div>
 
                 <!-- User Details (View Mode) -->
@@ -35,10 +39,12 @@
                 <div class="form-group">
                     <label for="address"><i class="fas fa-map-marker-alt"></i> Address</label>
                     <textarea id="address" name="address" class="form-control" rows="3" readonly>{{ userdetails.address }}</textarea>
+                    <div id="addressError" class="error-message"></div>
                 </div>
                 <div class="form-group">
                     <label for="age"><i class="fas fa-birthday-cake"></i> Age</label>
                     <input type="number" id="age" name="age" class="form-control" value="{{ userdetails.age }}" readonly>
+                    <div id="ageError" class="error-message"></div>
                 </div>
                 <div class="form-group">
                     <label for="sex"><i class="fas fa-venus-mars"></i> Gender</label>
@@ -53,6 +59,7 @@
                             <input type="radio" name="sex" value="Other" {% if userdetails.sex == 'other' %}checked{% endif %} disabled> Other
                         </label>
                     </div>
+                    <div id="sexError" class="error-message"></div>
                 </div>
 
                 <!-- Edit Profile Button -->
@@ -70,6 +77,65 @@
 </div>
 
 <script>
+    // Real-time validation function
+    function validateField(field, regex, errorMessage) {
+        const errorDiv = document.getElementById(field + 'Error');
+        const value = document.getElementById(field).value;
+        if (!regex.test(value)) {
+            errorDiv.textContent = errorMessage;
+            return false;
+        } else {
+            errorDiv.textContent = '';
+            return true;
+        }
+    }
+
+    // Add event listeners for real-time validation
+    document.getElementById('email').addEventListener('input', function() {
+        validateField('email', /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Please enter a valid email.');
+    });
+
+    document.getElementById('first_name').addEventListener('input', function() {
+        validateField('first_name', /^[A-Za-z]+$/, 'First name can only contain letters.');
+    });
+
+    document.getElementById('last_name').addEventListener('input', function() {
+        validateField('last_name', /^[A-Za-z]+$/, 'Last name can only contain letters.');
+    });
+
+    document.getElementById('phone').addEventListener('input', function() {
+        // Regex for 10-digit phone number
+        const phoneRegex = /^\d{10}$/;
+        validateField('phone', phoneRegex, 'Phone number must contain exactly 10 digits.');
+    });
+
+    document.getElementById('address').addEventListener('input', function() {
+        if (this.value.trim() === '') {
+            document.getElementById('addressError').textContent = 'Address cannot be empty.';
+        } else {
+            document.getElementById('addressError').textContent = '';
+        }
+    });
+
+    document.getElementById('age').addEventListener('input', function() {
+        validateField('age', /^[1-9][0-9]?$/, 'Please enter a valid age.');
+    });
+
+    document.getElementById('profileForm').addEventListener('submit', function(event) {
+        let valid = true;
+        // Check each field's validation before submitting
+        ['email', 'first_name', 'last_name', 'phone', 'address', 'age'].forEach(function(field) {
+            if (!validateField(field, document.getElementById(field).pattern, '')) {
+                valid = false;
+            }
+        });
+
+        if (!valid) {
+            event.preventDefault(); // Prevent form submission if validation fails
+            alert('Please correct the errors in the form.');
+        }
+    });
+
     // Toggle between view and edit modes
     document.getElementById('editProfileBtn').addEventListener('click', function() {
         // Enable editing mode for all input fields and textareas
@@ -194,6 +260,22 @@
     .btn-save:hover {
         transform: scale(1.05);
         box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+    }
+
+    /* Error message style */
+    .error-message {
+        color: red;
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    /* Styling for invalid inputs */
+    input:invalid {
+        border-color: red;
+    }
+
+    input:valid {
+        border-color: green;
     }
 </style>
 

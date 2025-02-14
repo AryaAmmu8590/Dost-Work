@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Register</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,19 +22,13 @@
             max-width: 400px;
             margin-top: 50px;
         }
-        .title, .sub {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 15px;
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: -10px;
+            margin-bottom: 10px;
         }
-        .mb {
-            margin-bottom: 30px;
-        }
-        input[type="text"], 
-        input[type="email"], 
-        input[type="number"], 
-        input[type="password"], 
-        input[type="textarea"] {
+        input, select, button {
             width: calc(100% - 20px);
             padding: 10px;
             margin: 10px 0;
@@ -42,40 +36,13 @@
             border-radius: 5px;
             font-size: 16px;
         }
-        .avatar {
-            display: inline-block;
-            margin-bottom: 15px;
-            cursor: pointer;
-        }
-        .avatar img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 3px solid #fff;
-        }
-        input[type="radio"] {
-            margin-right: 5px;
-        }
         button {
             background: #2c69e3;
             color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
             cursor: pointer;
-            width: 100%;
         }
         button:hover {
             background: #1278de;
-        }
-        a {
-            color: #fff;
-            text-decoration: underline;
-            font-weight: bold;
-        }
-        a:hover {
-            color: #ddd;
         }
         .center {
             display: flex;
@@ -83,42 +50,141 @@
             align-items: center;
             height: 100vh;
         }
-        label p {
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
     <div class="center">
-        <form class="form" action="{% url 'user_registration' %}" method="post">
+        <form class="form" action="{% url 'user_registration' %}" method="post" id="registrationForm">
             {% csrf_token %}
-            <span class="sub mb"><h1>Register To The Job</h1></span>
-            <input id="file" type="file" style="display: none;">
-            <label class="avatar" for="file">
-                <img src="{% static 'images/user.avif' %}" alt="User Avatar">
-            </label>
-            <input type="text" class="first_name" name="first_name" placeholder="First Name">
-            <input type="text" class="last_name" name="last_name" placeholder="Last Name">
-            
-            <input type="email" class="email" name="email" placeholder="E-mail">
-            <input type="number" class="number" name="phone" placeholder="Phone">
-            <input type="password" class="password" name="password" placeholder="Password">
-            <input type="number" name="age" class="age" placeholder="Age"><br>
-            <input type="textarea" name="address" class="address" placeholder="Address">
-            <p>Gender:</p>
-            <label>
-                <input type="radio" name="sex" value="male" class="input">Male
-            </label>
-            <label>
-                <input type="radio" name="sex" value="female" class="input">Female
-            </label>
-            <label >
-                <input style="margin-bottom: 20px;" type="radio" name="sex" value="other" class="input">Other
-            </label>
-            <span class="sub">Already have an account? <a href="#">Sign in</a></span>
-            <button>Register</button>
+            <h2>Register To The Job</h2>
+
+            <input type="text" name="first_name" placeholder="First Name" id="firstName" required>
+            <div class="error" id="firstNameError"></div>
+
+            <input type="text" name="last_name" placeholder="Last Name" id="lastName" required>
+            <div class="error" id="lastNameError"></div>
+
+            <input type="email" name="email" placeholder="E-mail" id="email" required>
+            <div class="error" id="emailError"></div>
+
+            <input type="tel" name="phone" placeholder="Phone (10 digits)" id="phone" required>
+            <div class="error" id="phoneError"></div>
+
+            <input type="password" name="password" placeholder="Password (min 6 chars)" id="password" required>
+            <div class="error" id="passwordError"></div>
+
+            <input type="number" name="age" placeholder="Age " id="age" required>
+            <div class="error" id="ageError"></div>
+
+            <input type="text" name="address" placeholder="Address" id="address" required>
+            <div class="error" id="addressError"></div>
+
+            <label for="gender">Gender:</label>
+            <select name="sex" id="gender" required>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+            <div class="error" id="genderError"></div>
+
+            <p>Already have an account? <a href="#">Sign in</a></p>
+            <button type="submit">Register</button>
         </form>
     </div>
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            let valid = true;
+
+            const firstName = document.getElementById('firstName');
+            const lastName = document.getElementById('lastName');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const password = document.getElementById('password');
+            const age = document.getElementById('age');
+            const address = document.getElementById('address');
+            const gender = document.getElementById('gender');
+
+            const firstNameError = document.getElementById('firstNameError');
+            const lastNameError = document.getElementById('lastNameError');
+            const emailError = document.getElementById('emailError');
+            const phoneError = document.getElementById('phoneError');
+            const passwordError = document.getElementById('passwordError');
+            const ageError = document.getElementById('ageError');
+            const addressError = document.getElementById('addressError');
+            const genderError = document.getElementById('genderError');
+
+            // First Name validation
+            if (!firstName.value.trim()) {
+                firstNameError.textContent = 'First Name is required.';
+                valid = false;
+            } else {
+                firstNameError.textContent = '';
+            }
+
+            // Last Name validation
+            if (!lastName.value.trim()) {
+                lastNameError.textContent = 'Last Name is required.';
+                valid = false;
+            } else {
+                lastNameError.textContent = '';
+            }
+
+            // Email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email.value.trim() || !emailPattern.test(email.value.trim())) {
+                emailError.textContent = 'Enter a valid email.';
+                valid = false;
+            } else {
+                emailError.textContent = '';
+            }
+
+            // Phone validation (exactly 10 digits)
+            if (!phone.value.match(/^\d{10}$/)) {
+                phoneError.textContent = 'Phone must be exactly 10 digits.';
+                valid = false;
+            } else {
+                phoneError.textContent = '';
+            }
+
+            // Password validation (at least 6 characters)
+            if (password.value.length < 6) {
+                passwordError.textContent = 'Password must be at least 6 characters.';
+                valid = false;
+            } else {
+                passwordError.textContent = '';
+            }
+
+            // Age validation (exactly two-digit number 10-99)
+            if (!age.value.match(/^\d{2}$/) || age.value < 10 || age.value > 99) {
+                ageError.textContent = 'Enter a valid two-digit age (10-99).';
+                valid = false;
+            } else {
+                ageError.textContent = '';
+            }
+
+            // Address validation
+            if (!address.value.trim()) {
+                addressError.textContent = 'Address is required.';
+                valid = false;
+            } else {
+                addressError.textContent = '';
+            }
+
+            // Gender validation
+            if (!gender.value) {
+                genderError.textContent = 'Please select a gender.';
+                valid = false;
+            } else {
+                genderError.textContent = '';
+            }
+
+            // Prevent form submission if validation fails
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+    </script>
 </body>
 </html>

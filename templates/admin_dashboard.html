@@ -59,6 +59,16 @@
             background-color: #0c498a;
         }
 
+        .dropdown-content {
+            display: none;
+            background-color: #0c498a;
+            padding-left: 20px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
         .main-content {
             margin-left: 250px;
             padding: 20px;
@@ -76,21 +86,19 @@
             color: #333;
         }
 
-        /* Notification Icon */
         .notification-icon {
             position: absolute;
             top: 20px;
             right: 40px;
             font-size: 24px;
-            color: black;  /* Changed to black */
+            color: black;
             cursor: pointer;
         }
 
         .notification-icon:hover {
-            color: #074b94;  /* Optional: Change color on hover */
+            color: #074b94;
         }
 
-        /* Notification Badge */
         .notification-badge {
             position: absolute;
             top: 12px;
@@ -101,18 +109,15 @@
             padding: 4px 8px;
             border-radius: 50%;
         }
-
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Sidebar -->
         <div class="sidebar">
             <h2>ADMIN</h2>
             <ul>
                 <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 
-                <!-- Dropdown for Users -->
                 <li class="dropdown">
                     <a href="javascript:void(0)"><i class="fas fa-users"></i> Users</a>
                     <div class="dropdown-content">
@@ -121,26 +126,23 @@
                         <a href="{% url 'workers_details' %}"><i class="fas fa-user-tie"></i> Manage Workers</a>
                     </div>
                 </li>
-
-                <li><a href="{% url 'reports' %}"><i class="fas fa-chart-line"></i> Reports</a></li>
-                <li><a href="#"><i class="fas fa-cogs"></i> Settings</a></li>
+                
+                
+                
                 <li><a href="{% url 'admin_booking' %}"><i class="fas fa-calendar-check"></i> Booking</a></li>
+                <li><a href="{% url 'admin_pay' %}"><i class="fas fa-calendar-check"></i> View Payments</a></li>
                 <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </div>
 
-        <!-- Main Content -->
         <div class="main-content">
-            <!-- Notification Bell -->
             <div class="notification-icon">
                 <i class="fas fa-bell"></i>
-                <a href="{% url 'admin_noty' %}"<span class="notification-badge">3</span></a>
+                <a href="{% url 'admin_noty' %}"><span class="notification-badge">3</span></a>
             </div>
-
             <h1>Welcome to the Dashboard</h1>
             <p>This is where your main content will go. You can view and manage all the details and settings for the platform here.</p>
         </div>
     </div>
-
 </body>
 </html>

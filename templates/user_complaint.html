@@ -5,35 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Complaints</title>
     <style>
+        /* Global Styles */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f9fc;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            color: #333;
         }
+
+        h1 {
+            text-align: center;
+            color: #19255a;
+            padding: 20px 0;
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        /* Table Styles */
         table {
-            width: 100%;
+            width: 90%;
+            margin: 40px auto;
             border-collapse: collapse;
-            margin: 20px 0;
-            background-color: #fff;
+            background-color: #ffffff;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+
         th, td {
-            padding: 12px;
+            padding: 14px 20px;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            font-size: 1.1rem;
         }
+
         th {
-            background-color: #0078d7;
-            color: white;
+            background-color: #19255a;
+            color: #fff;
+            text-transform: uppercase;
         }
+
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
+
         tr:hover {
             background-color: #f1f1f1;
         }
+
+        /* Button Styles */
+        .reply-btn {
+            display: inline-block;
+            background-color: #19255a;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .reply-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        /* No Data Style */
+        .no-data {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #888;
+            padding: 20px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+            }
+            th, td {
+                font-size: 1rem;
+                padding: 12px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -43,24 +101,27 @@
         <thead>
             <tr>
                 <th>Complaint ID</th>
-                
                 <th>Name</th>
                 <th>Email</th>
                 <th>Complaint</th>
+                <th>Action</th> <!-- Action column for the reply button -->
             </tr>
         </thead>
         <tbody>
             {% for complaint in complaints %}
             <tr>
                 <td>{{ complaint.id }}</td>
-               
                 <td>{{ complaint.user.first_name }}</td>
                 <td>{{ complaint.user.email }}</td>
                 <td>{{ complaint.complaints }}</td>
+                <td>
+                    <!-- "Reply" button added here -->
+                    <a href="{% url 'agency_user_replay' complaint.id %}" class="reply-btn">Reply</a>
+                </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="8">No complaints available</td>
+                <td colspan="5" class="no-data">No complaints available</td>
             </tr>
             {% endfor %}
         </tbody>

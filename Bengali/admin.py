@@ -10,5 +10,7 @@ admin.site.register(AgencyDetails)
 admin.site.register(Review)
 admin.site.register(BookWorker)
 admin.site.register(UserComplaints)
+admin.site.register(Payment)
+
 
 
