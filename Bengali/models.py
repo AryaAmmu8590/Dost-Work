@@ -150,6 +150,7 @@ class UserComplaints(models.Model):
     
     
     
+    
 class Notification(models.Model):
     recipient = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='notifications')
     sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='sent_notifications', null=True, blank=True)

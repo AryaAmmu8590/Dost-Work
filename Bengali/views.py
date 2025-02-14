@@ -60,6 +60,7 @@ def user_complaints(request):
         "complaints": complaints,
         'worker':worker,
         "form": form,
+    
     }
     print(worker,worker_id)
     return render(request, "user_complaints.html", context)
@@ -622,6 +623,24 @@ def weekly_worker_reports(request):
     booking = BookWorker.objects.filter(worker__profile=request.user)
     print(booking   )
     return render(request, "weekly_worker_reports.html", {"all_bookings": booking})
+
+
+
+
+
+
+def agency_user_replay(request):
+   
+    return render(request,"agency_user_replay.html"  )
+
+
+def agency_worker_replay(request):
+   
+    return render(request,"agency_worker_replay.html"  )
+   
+
+
+
 
 
 

@@ -57,6 +57,9 @@ urlpatterns = [
      
      path('worker_report/', views.worker_report, name='worker_report'),
      path('admin_noty/', views.admin_noty, name='admin_noty'),
+     path('agency_user_replay/', views.agency_user_replay, name='agency_user_replay'),
+
+     path('agency_worker_replay/', views.agency_worker_replay, name='agency_worker_replay'),
 
 
 
