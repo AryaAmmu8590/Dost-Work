@@ -145,7 +145,7 @@
 </div>
 <div class="container-main">
 
-    <form class="form" method="POST" enctype="multipart/form-data" action="" id="worker-registration-form">
+    <form class="form" method="POST" enctype="multipart/form-data" action="{% url 'worker-registration' %}" id="worker-registration-form">
         {% csrf_token %}
         <div class="avatar">&#128100;</div>
 

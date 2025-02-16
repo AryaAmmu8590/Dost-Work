@@ -171,11 +171,14 @@ def book_worker(request,worker_id):
             book_worker.save()
               # Create a notification for the worker
             notification_message = f'You have a new booking from {request.user.email} at {place} on {time}.'
+
+            worker = WorkersDetails.objects.get(id=worker_id)
             Notification.objects.create(
                 recipient=worker.profile,
                 sender=request.user,
-                message=notification_message
+                message=f'Your have a booking request with {request.user.email} .'    
             )
+
             messages.success(request, 'Your booking has been submitted successfully.')
         except Exception as e:
             print(e)
@@ -191,7 +194,9 @@ def admin_noty(request):
     return render(request, "admin_noty.html", {'notifications': notifications})
 
 
-
+def worker_notification(request):
+    notifications = Notification.objects.filter(recipient=request.user).order_by('-created_at')
+    return render(request, "worker_notification.html", {'notifications': notifications})
 
 
 
@@ -613,8 +618,6 @@ def worker_report(request):
     return render(request,"worker_reports.html", {'bookings': bookings})
 
 
-def email(request):
-    return render(request,"email.html")
 
 
 
@@ -719,8 +722,34 @@ def admin_pay(request):
 
 
 
- 
+from django.core.mail import send_mail
+from django.conf import settings
 
+def send_email(subject, message, recipient_email):
+    try:
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[recipient_email],
+            fail_silently=False,  # Set to True to avoid exceptions
+        )
+        return {"success": True, "message": "Email sent successfully"}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+def send_admin_email(request):
+    if request.method == 'POST':
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        recipient_email = request.POST.get('recipient_email')
+        result = send_email(subject, message, recipient_email)
+        if result.get('success'):
+            messages.success(request, 'Email sent successfully.')
+        else:
+            messages.error(request, 'Failed to send email. Please try again.')
+    return render(request, 'sendmail.html')
 
 
  

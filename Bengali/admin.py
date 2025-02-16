@@ -11,6 +11,7 @@ admin.site.register(Review)
 admin.site.register(BookWorker)
 admin.site.register(UserComplaints)
 admin.site.register(Payment)
+admin.site.register(Notification)
 
 
 

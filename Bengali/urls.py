@@ -66,7 +66,9 @@ urlpatterns = [
      path('payment/', views.payment, name='payment'),
      path('success/', views.success, name='success'),
      path('admin_pay/', views.admin_pay, name='admin_pay'),
-     path('email/', views.email, name='email'),
+     path('email/', views.send_admin_email, name='email'),
+     path('worker_notification/', views.worker_notification, name='worker_notification'),
+
 
 
 

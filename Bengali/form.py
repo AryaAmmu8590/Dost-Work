@@ -13,7 +13,7 @@ class  UserDetailsForm(forms.ModelForm):
 class WorkersDetailsForm(forms.ModelForm):
     class Meta:
         model= WorkersDetails
-        fields=['profile','id_no','image','address']
+        fields=['profile','id_no','image','address','category','gender','age']
 
 
 class AgencyDetailsForm(forms.ModelForm):
